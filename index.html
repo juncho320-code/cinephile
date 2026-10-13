@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cinephile Archive & Analytics | 290 Films</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cinema: {
+              black: '#07080a',
+              card: '#0f1117',
+              border: '#1f2430',
+              gold: '#e5a93c',
+              goldLight: '#f3c368',
+              crimson: '#e50914',
+              muted: '#8b949e'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            serifKr: ['Noto Serif KR', 'serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #07080a;
+      color: #e6edf3;
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    /* Dynamic Ambient Spotlights (Cinematic Atmosphere) */
+    .cinema-ambient-spotlight {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(85px);
+      transition: opacity 1s ease;
+    }
+    .spotlight-1 {
+      top: -160px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 720px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(229, 169, 60, 0.12) 0%, rgba(243, 195, 104, 0.04) 50%, transparent 80%);
+      animation: ambientBreathe 9s ease-in-out infinite alternate;
+    }
+    .spotlight-2 {
+      bottom: -120px;
+      right: -60px;
+      width: 520px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(229, 9, 20, 0.06) 0%, rgba(229, 169, 60, 0.03) 60%, transparent 80%);
+      animation: ambientBreathe 12s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes ambientBreathe {
+      0% { opacity: 0.55; transform: translateX(-50%) scale(0.96); }
+      100% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fce09b 0%, #e5a93c 45%, #b8860b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass-card {
+      background: rgba(15, 17, 23, 0.84);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    /* Dynamic Interactive Card 3D Lift & Edge Glow */
+    .interactive-card {
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.25s ease, 
+                  background-color 0.25s ease;
+      will-change: transform, box-shadow;
+    }
+    .interactive-card:hover {
+      transform: translateY(-5px) scale(1.012);
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.8), 0 0 20px -2px rgba(229, 169, 60, 0.22);
+      border-color: rgba(229, 169, 60, 0.5) !important;
+    }
+    .interactive-card:active {
+      transform: translateY(-2px) scale(0.995);
+    }
+
+    /* Staggered Card Entrance Animation */
+    @keyframes cardFadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .card-enter {
+      animation: cardFadeSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Spring Pop for Modal Dialog */
+    @keyframes modalSpring {
+      0% {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    .modal-dialog-enter {
+      animation: modalSpring 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    /* Star Icon Pop */
+    @keyframes starBounce {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35) rotate(-6deg); }
+      70% { transform: scale(0.92) rotate(3deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .star-pop {
+      animation: starBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Shimmer Shine on Buttons */
+    .shimmer-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40%;
+      height: 200%;
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+      transform: rotate(30deg);
+      transition: all 0.7s ease;
+    }
+    .shimmer-btn:hover::after {
+      left: 130%;
+    }
+
+    /* Floating Action Button Pulse Ring */
+    @keyframes fabRing {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 0; }
+      100% { transform: scale(1.25); opacity: 0; }
+    }
+    .fab-pulse-ring {
+      animation: fabRing 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    }
+
+    .rating-pill.active {
+      background-color: #e5a93c !important;
+      color: #000 !important;
+      border-color: #e5a93c !important;
+      font-weight: 700 !important;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(229, 169, 60, 0.3);
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #07080a;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #1f2430;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #e5a93c;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-cinema-gold selection:text-black relative">
+  <!-- Dynamic Ambient Lighting Background -->
+  <div class="cinema-ambient-spotlight spotlight-1"></div>
+  <div class="cinema-ambient-spotlight spotlight-2"></div>
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 bg-cinema-black/95 backdrop-blur-md border-b border-cinema-border px-4 sm:px-6 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-9 h-9 rounded-lg bg-cinema-gold/10 border border-cinema-gold/30 flex items-center justify-center text-cinema-gold text-lg">
+          <i class="fa-solid fa-film"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-cinzel text-base sm:text-lg font-bold tracking-wider gold-gradient-text">CINEPHILE VAULT</h1>
+            <span id="readonlyHeaderBadge" class="hidden px-2 py-0.5 rounded text-3xs bg-cinema-gold/10 text-cinema-gold border border-cinema-gold/30 font-mono">Read-Only</span>
+          </div>
+          <p class="text-2xs sm:text-xs text-cinema-muted">Watchapedia & Obsidian OS</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="flex items-center space-x-3.5 sm:space-x-6 text-xs">
+        <div class="text-center">
+          <div class="text-2xs text-cinema-muted">총 감상</div>
+          <div id="statTotal" class="font-bold text-cinema-gold font-cinzel text-sm sm:text-base">290</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xs text-cinema-muted">한줄평</div>
+          <div id="statReviews" class="font-bold text-gray-200 font-cinzel text-sm sm:text-base">26</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xs text-cinema-muted">볼 예정작</div>
+          <div id="statWatchlist" class="font-bold text-gray-200 font-cinzel text-sm sm:text-base">39</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-10">
+
+    <!-- 1. ANALYTICS & PHILOSOPHY: RATING DISTRIBUTION -->
+    <section class="glass-card rounded-2xl p-4 sm:p-6 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold flex items-center space-x-2">
+            <i class="fa-solid fa-chart-column text-cinema-gold"></i>
+            <span>개인 평점 분포 & 채점 기준</span>
+          </h2>
+          <p class="text-xs text-cinema-muted mt-0.5">평점 바 또는 하단 별점 버튼을 터치하면 해당 기준과 영화 목록이 표시됩니다.</p>
+        </div>
+        <button onclick="clearRatingFilter()" id="btnClearFilter" class="hidden text-xs text-cinema-gold hover:underline font-semibold flex items-center space-x-1">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span>필터 초기화</span>
+        </button>
+      </div>
+
+      <!-- Touch-friendly Rating Selector Buttons (Mobile First) -->
+      <div class="flex flex-wrap gap-1.5 sm:gap-2 mb-4" id="ratingPillContainer">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Selected Rating Criteria Spotlight Box (Always Visible & Interactive) -->
+      <div id="selectedRatingSpotlight" class="p-4 rounded-xl bg-cinema-black/80 border border-cinema-border/80 transition-all mb-4">
+        <div class="flex items-center justify-between mb-1.5">
+          <div class="flex items-center space-x-2">
+            <span id="spotlightStarBadge" class="px-2.5 py-0.5 rounded bg-cinema-gold text-black font-bold font-cinzel text-xs">
+              전체 평점 분포
+            </span>
+            <span id="spotlightCountBadge" class="text-2xs text-cinema-muted">
+              총 290편
+            </span>
+          </div>
+          <span class="text-2xs text-cinema-muted">Film Rating Philosophy</span>
+        </div>
+        <p id="spotlightDesc" class="text-xs sm:text-sm text-gray-200 font-serifKr italic leading-relaxed">
+          "원하는 별점을 터치하여 해당 평점에 대한 나만의 기준과 영화들을 확인하세요."
+        </p>
+      </div>
+
+      <!-- Chart.js Canvas -->
+      <div class="h-56 sm:h-64 relative">
+        <canvas id="ratingChart"></canvas>
+      </div>
+    </section>
+
+    <!-- 2. DIRECTOR DEEP DIVE (정확한 감독 매핑 & 듀얼 뷰) -->
+    <section class="glass-card rounded-2xl p-4 sm:p-6 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold flex items-center space-x-2">
+            <i class="fa-solid fa-clapperboard text-cinema-gold"></i>
+            <span>Director Deep Dive (인생 감독 랭킹)</span>
+          </h2>
+          <p class="text-xs text-cinema-muted mt-0.5">실제 리뷰 및 본 작품들 아카이브에 기반하여 공인 집계된 감독 랭킹입니다.</p>
+        </div>
+        <div class="flex items-center space-x-1.5 text-xs">
+          <button onclick="sortDirectors('avg')" id="btnSortAvg" class="px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs">최고 평점순</button>
+          <button onclick="sortDirectors('count')" id="btnSortCount" class="px-3 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs">최다 관람순</button>
+        </div>
+      </div>
+
+      <!-- Director Chips -->
+      <div id="directorChips" class="flex flex-wrap gap-1.5 sm:gap-2 mb-5">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Selected Director Dual View -->
+      <div id="directorDetailBox" class="bg-cinema-black/70 rounded-xl p-4 sm:p-5 border border-cinema-border">
+        <div class="flex flex-wrap items-center justify-between border-b border-cinema-border pb-3 mb-3 gap-2">
+          <div class="flex items-center space-x-2.5">
+            <h3 id="selectedDirectorName" class="text-base sm:text-lg font-bold text-cinema-gold font-serifKr">감독을 선택하세요</h3>
+            <span id="selectedDirectorMeta" class="text-2xs px-2 py-0.5 rounded bg-cinema-border text-gray-300"></span>
+          </div>
+          <div class="text-2xs text-cinema-muted">이미 본 영화 vs 볼 예정작 (OTT)</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div>
+            <h4 class="text-xs font-bold text-gray-300 mb-2 flex items-center space-x-1.5">
+              <i class="fa-solid fa-circle-check text-green-500"></i>
+              <span>이미 본 영화</span>
+            </h4>
+            <div id="dirWatchedList" class="space-y-1.5 text-xs custom-scroll max-h-56 overflow-y-auto pr-1"></div>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-300 mb-2 flex items-center space-x-1.5">
+              <i class="fa-solid fa-clock text-amber-500"></i>
+              <span>볼 예정작 (OTT)</span>
+            </h4>
+            <div id="dirWatchlist" class="space-y-1.5 text-xs custom-scroll max-h-56 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. CINEPHILE REVIEWS & MOVIE LIST (한줄평 갤러리 및 한줄평 작성/수정) -->
+    <section>
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <h2 class="text-base sm:text-lg font-bold flex items-center space-x-2">
+              <i class="fa-solid fa-quote-left text-cinema-gold"></i>
+              <span id="reviewsSectionTitle">Cinephile Quotes & Reviews (영화 & 한줄평)</span>
+            </h2>
+            <span id="reviewsCountBadge" class="text-2xs px-2 py-0.5 rounded bg-cinema-gold/10 text-cinema-gold border border-cinema-gold/20 font-bold"></span>
+          </div>
+          <p class="text-xs text-cinema-muted mt-0.5">평점 필터링 또는 검색을 통해 영화를 확인하고 [+ 한줄평 작성]을 누르면 즉시 옵시디언에 기록됩니다.</p>
+        </div>
+        <div class="relative w-full sm:w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-cinema-muted text-xs"></i>
+          <input type="text" id="reviewSearchInput" oninput="filterReviews()" placeholder="제목, 감독, 한줄평 검색..." class="w-full bg-cinema-card border border-cinema-border rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-cinema-gold text-gray-200">
+        </div>
+      </div>
+
+      <div id="reviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- 4. AUTEUR WATCHLIST & OTT RADAR -->
+    <section class="glass-card rounded-2xl p-4 sm:p-6 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold flex items-center space-x-2">
+            <i class="fa-solid fa-bookmark text-cinema-gold"></i>
+            <span>Auteur Watchlist (진짜 볼 예정작)</span>
+          </h2>
+          <p class="text-xs text-cinema-muted mt-0.5">이미 본 영화는 정리되었으며, [✓ 봤어요]를 누르면 평점/한줄평을 작성하여 즉시 감상작으로 승격됩니다.</p>
+        </div>
+        <!-- OTT Filter Badges -->
+        <div class="flex flex-wrap items-center gap-1 text-2xs sm:text-xs" id="ottFilterBadges">
+          <button onclick="filterWatchlistByOtt('ALL')" class="ott-btn active px-2.5 py-1 rounded bg-cinema-gold text-black font-semibold">전체</button>
+          <button onclick="filterWatchlistByOtt('넷플')" class="ott-btn px-2.5 py-1 rounded bg-cinema-border hover:bg-gray-800 text-gray-300">넷플릭스</button>
+          <button onclick="filterWatchlistByOtt('왓챠')" class="ott-btn px-2.5 py-1 rounded bg-cinema-border hover:bg-gray-800 text-gray-300">왓챠</button>
+          <button onclick="filterWatchlistByOtt('티빙')" class="ott-btn px-2.5 py-1 rounded bg-cinema-border hover:bg-gray-800 text-gray-300">티빙</button>
+          <button onclick="filterWatchlistByOtt('디즈니')" class="ott-btn px-2.5 py-1 rounded bg-cinema-border hover:bg-gray-800 text-gray-300">디즈니+</button>
+          <button onclick="filterWatchlistByOtt('웨이브')" class="ott-btn px-2.5 py-1 rounded bg-cinema-border hover:bg-gray-800 text-gray-300">웨이브</button>
+        </div>
+      </div>
+
+      <div id="watchlistGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING ACTION BUTTON (FAB) -->
+  <aside id="fabContainer" class="fixed bottom-6 right-5 sm:right-8 z-40">
+    <button onclick="openAddModal()" aria-label="새 영화 기록 추가" class="relative group flex items-center space-x-2 bg-cinema-gold text-black font-extrabold px-4.5 py-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl shadow-cinema-gold/40 active:scale-95 hover:scale-105 transition">
+      <span class="absolute inset-0 rounded-full bg-cinema-gold fab-pulse-ring"></span>
+      <i class="fa-solid fa-plus text-sm relative z-10"></i>
+      <span class="text-xs sm:text-sm tracking-tight relative z-10 font-bold">새 영화 기록</span>
+    </button>
+  </aside>
+
+  <!-- QUICK ADD / RECORD / EDIT COMMENT MODAL -->
+  <div id="recordModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
+    <div class="bg-cinema-card border border-cinema-border w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl relative modal-dialog-enter">
+      <button onclick="closeAddModal()" class="absolute right-4 top-4 text-cinema-muted hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="flex items-center space-x-2.5 mb-4">
+        <div class="w-8 h-8 rounded-lg bg-cinema-gold/10 text-cinema-gold flex items-center justify-center">
+          <i class="fa-solid fa-pen-nib"></i>
+        </div>
+        <h3 id="modalTitleText" class="text-base sm:text-lg font-bold font-serifKr">영화 기록 및 한줄평 등록</h3>
+      </div>
+
+      <form id="recordForm" onsubmit="submitMovieRecord(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" id="modalIsFromWatchlist" value="false">
+
+        <div>
+          <label class="block text-gray-400 font-semibold mb-1">영화 제목 *</label>
+          <input type="text" id="modalInputTitle" required placeholder="예: 가여운 것들" class="w-full bg-cinema-black border border-cinema-border rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-cinema-gold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-gray-400 font-semibold mb-1">개봉 연도</label>
+            <input type="text" id="modalInputYear" placeholder="예: 2023" class="w-full bg-cinema-black border border-cinema-border rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-cinema-gold">
+          </div>
+          <div>
+            <label class="block text-gray-400 font-semibold mb-1">감독 <span class="text-cinema-muted font-normal text-3xs">(선택)</span></label>
+            <input type="text" id="modalInputDirector" placeholder="예: 크리스토퍼 놀란 (미상 시 생략)" class="w-full bg-cinema-black border border-cinema-border rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-cinema-gold">
+          </div>
+        </div>
+
+        <!-- Interactive Star Rating (0.5 Step Supported) -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-gray-300 font-semibold text-xs sm:text-sm">
+              <span class="text-cinema-gold font-bold">★</span> 별점 평가 (0.5점 단위) *
+            </label>
+            <div class="flex items-center space-x-1.5 bg-cinema-black border border-cinema-border px-2 py-0.5 rounded-lg">
+              <span class="text-cinema-gold font-extrabold text-xs">★</span>
+              <input type="number" id="modalInputRating" step="0.5" min="0.5" max="5.0" value="4.0" required 
+                class="w-14 bg-transparent text-center font-bold text-cinema-gold text-sm focus:outline-none" 
+                onchange="setRating(parseFloat(this.value))">
+            </div>
+          </div>
+
+          <div class="bg-cinema-black p-3 rounded-xl border border-cinema-border space-y-3">
+            <!-- 5 Big Stars with split 0.5-touch zones -->
+            <div class="flex items-center justify-center space-x-2" id="starSelector">
+              <!-- Star icons generated in JS -->
+            </div>
+
+            <!-- 0.5 Step Range Slider -->
+            <div class="px-1">
+              <input type="range" id="modalRatingSlider" min="0.5" max="5.0" step="0.5" value="4.0" 
+                class="w-full accent-cinema-gold cursor-pointer h-2 bg-gray-800 rounded-lg" 
+                oninput="setRating(parseFloat(this.value))">
+              <div class="flex justify-between text-3xs text-cinema-muted px-1 mt-1 font-mono">
+                <span>0.5</span>
+                <span>1.0</span>
+                <span>2.0</span>
+                <span>3.0</span>
+                <span>4.0</span>
+                <span>5.0</span>
+              </div>
+            </div>
+
+            <!-- 10 Quick-tap Pill Chips for Mobile (0.5 to 5.0) -->
+            <div class="border-t border-cinema-border/50 pt-2">
+              <div class="text-3xs text-cinema-muted mb-1.5 text-center font-semibold">원터치 등급 선택</div>
+              <div id="modalRatingChips" class="flex flex-wrap gap-1.5 justify-center">
+                <!-- Chips generated in JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Philosophy Quote Box -->
+          <div id="modalRatingDesc" class="mt-2 text-cinema-gold text-xs italic font-serifKr bg-cinema-gold/10 border border-cinema-gold/30 p-2.5 rounded-lg text-center leading-relaxed">
+            "강렬한 인상을 남기는 영화, 취향과 상황에 따라 충분히 명작이라 불릴 수 있는 영화"
+          </div>
+        </div>
+
+        <!-- One-line review / raw memo -->
+        <div>
+          <label class="block text-gray-400 font-semibold mb-1">한줄평 / Raw 메모</label>
+          <textarea id="modalInputComment" rows="3" placeholder="영화를 보고 느낀 날것의 사유나 인상적인 지점을 남겨주세요..." class="w-full bg-cinema-black border border-cinema-border rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-cinema-gold"></textarea>
+          <p class="text-2xs text-cinema-muted mt-1">※ 한줄평 작성 시 Scores.md 및 `61_Reviews/` 원자화 리뷰 마크다운 파일이 자동 갱신됩니다.</p>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2.5 pt-3 border-t border-cinema-border">
+          <button type="button" onclick="closeAddModal()" class="px-4 py-2 rounded-lg bg-cinema-border text-gray-300 hover:bg-gray-800 transition">취소</button>
+          <button type="submit" id="modalSubmitBtn" class="px-5 py-2 rounded-lg bg-cinema-gold hover:bg-cinema-goldLight text-black font-bold transition shadow-lg shadow-cinema-gold/20 flex items-center space-x-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>옵시디언 볼트에 기록 저장</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-cinema-gold text-black font-semibold px-4 py-2.5 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition duration-300 flex items-center space-x-2 text-xs">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg">저장 완료</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-cinema-border py-6 text-center text-xs text-cinema-muted mt-12">
+    Personal Obsidian Vault OS • 60_Movie • Powered by Antigravity
+  </footer>
+
+  <!-- EMBEDDED DATA SCRIPT & LOGIC -->
+  <script>
+    const RAW_DATA = {"movies": [{"title": "2001 스페이스 오디세이", "rating": 5.0, "year": "1968", "director": "스탠리 큐브릭", "comment": "", "has_review": false}, {"title": "올드보이", "rating": 5.0, "year": "2003", "director": "박찬욱", "comment": "복수의 우로보로스가 낳은 알 속 괴물, 그것에게도 살 권리가 있을까", "has_review": true}, {"title": "가능한 사랑", "rating": 5.0, "year": "2026", "director": "", "comment": "", "has_review": false}, {"title": "기생충", "rating": 5.0, "year": "2019", "director": "봉준호", "comment": "", "has_review": false}, {"title": "노인을 위한 나라는 없다", "rating": 5.0, "year": "2007", "director": "", "comment": "", "has_review": false}, {"title": "다크 나이트", "rating": 5.0, "year": "2008", "director": "", "comment": "", "has_review": false}, {"title": "대부", "rating": 5.0, "year": "1972", "director": "", "comment": "", "has_review": false}, {"title": "매트릭스", "rating": 5.0, "year": "1999", "director": "", "comment": "", "has_review": false}, {"title": "살인의 추억", "rating": 5.0, "year": "2003", "director": "봉준호", "comment": "", "has_review": false}, {"title": "스타워즈 에피소드 4: 새로운 희망", "rating": 5.0, "year": "1977", "director": "", "comment": "", "has_review": false}, {"title": "양들의 침묵", "rating": 5.0, "year": "1991", "director": "", "comment": "", "has_review": false}, {"title": "오디세이", "rating": 5.0, "year": "2026", "director": "", "comment": "", "has_review": false}, {"title": "인터스텔라", "rating": 5.0, "year": "2014", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "킬링 디어", "rating": 5.0, "year": "2017", "director": "요르고스 란티모스", "comment": "", "has_review": false}, {"title": "극장판 진격의 거인 완결편 더 라스트 어택", "rating": 4.5, "year": "2024", "director": "", "comment": "", "has_review": false}, {"title": "듄: 파트2", "rating": 4.5, "year": "2024", "director": "", "comment": "", "has_review": false}, {"title": "리바이어던", "rating": 4.5, "year": "2014", "director": "안드레이 즈바이긴체프", "comment": "술에 취한채 국가라는 레비아탄에게 잡아먹이는 체험. 이 모든 것들에 이유라도 있었으면...", "has_review": true}, {"title": "메멘토", "rating": 4.5, "year": "2000", "director": "크리스토퍼 놀란", "comment": "풀롯의 마술사라는 별명이 단번에 납득가는 충격적 결말", "has_review": true}, {"title": "밀양", "rating": 4.5, "year": "2007", "director": "이창동", "comment": "", "has_review": false}, {"title": "반지의 제왕: 반지 원정대", "rating": 4.5, "year": "2001", "director": "", "comment": "", "has_review": false}, {"title": "반지의 제왕: 왕의 귀환", "rating": 4.5, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "버닝", "rating": 4.5, "year": "2018", "director": "이창동", "comment": "", "has_review": false}, {"title": "센과 치히로의 행방불명", "rating": 4.5, "year": "2001", "director": "", "comment": "", "has_review": false}, {"title": "쇼생크 탈출", "rating": 4.5, "year": "1994", "director": "", "comment": "", "has_review": false}, {"title": "쉰들러 리스트", "rating": 4.5, "year": "1993", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈 에피소드 5: 제국의 역습", "rating": 4.5, "year": "1980", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈 에피소드 6: 제다이의 귀환", "rating": 4.5, "year": "1983", "director": "", "comment": "", "has_review": false}, {"title": "스탑 메이킹 센스", "rating": 4.5, "year": "1984", "director": "", "comment": "", "has_review": false}, {"title": "아무도 모른다", "rating": 4.5, "year": "2004", "director": "고레에다 히로카즈", "comment": "", "has_review": false}, {"title": "안티크라이스트", "rating": 4.5, "year": "2009", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "인생은 아름다워", "rating": 4.5, "year": "1997", "director": "", "comment": "", "has_review": false}, {"title": "조커", "rating": 4.5, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "토이 스토리", "rating": 4.5, "year": "1995", "director": "", "comment": "", "has_review": false}, {"title": "트루먼 쇼", "rating": 4.5, "year": "1998", "director": "", "comment": "", "has_review": false}, {"title": "플로리다 프로젝트", "rating": 4.5, "year": "2017", "director": "션 베이커", "comment": "", "has_review": false}, {"title": "해리포터와 마법사의 돌", "rating": 4.5, "year": "2001", "director": "", "comment": "", "has_review": false}, {"title": "홀리 모터스", "rating": 4.5, "year": "2012", "director": "레오 카락스", "comment": "무한한 세트장 속을 살아가는 한 배우의 일기장. 연기와 현실 사이의 붕괴와 그걸 대하는 관객의 태도에 대한 감독의 아주 개인적인 찬사.", "has_review": true}, {"title": "가여운 것들", "rating": 4.0, "year": "2026", "director": "요르고스 란티모스", "comment": "눈을 때지 못하는 미장센, 뇌를 끌 수 없는 전개 그 속에서 같이 성장한다", "has_review": true}, {"title": "티탄", "rating": 4.0, "year": "", "director": "쥘리아 뒤쿠르노", "comment": "부성애, 성욕의 한계점을 엿본 느낌.", "has_review": true}, {"title": "가장 따뜻한 색, 블루", "rating": 4.0, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "겟 아웃", "rating": 4.0, "year": "2017", "director": "조던 필", "comment": "", "has_review": false}, {"title": "괴물", "rating": 4.0, "year": "2023", "director": "봉준호", "comment": "", "has_review": false}, {"title": "굿 윌 헌팅", "rating": 4.0, "year": "1997", "director": "", "comment": "", "has_review": false}, {"title": "그랜드 부다페스트 호텔", "rating": 4.0, "year": "2014", "director": "웨스 앤더슨", "comment": "우리가 구전에 부여하는 환상적 노스탤지아", "has_review": true}, {"title": "그을린 사랑", "rating": 4.0, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "니모를 찾아서", "rating": 4.0, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "다크 나이트 라이즈", "rating": 4.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "닥터 스트레인지", "rating": 4.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "당신은 아직 아무것도 보지 못했다", "rating": 4.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "더 랍스터", "rating": 4.0, "year": "2015", "director": "요르고스 란티모스", "comment": "동조(同調)라는 매끄러운 단일 파면을 위해 신체의 거세와 굴절을 강요하는 전체주의적 우화.", "has_review": true}, {"title": "데드풀", "rating": 4.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "돌이킬 수 없는", "rating": 4.0, "year": "2002", "director": "", "comment": "시간에 의해 망가진 필름이 영사하는 복수로 파괴된 인간성.", "has_review": true}, {"title": "듄", "rating": 4.0, "year": "2021", "director": "드니 빌뇌브", "comment": "", "has_review": false}, {"title": "라쇼몽", "rating": 4.0, "year": "1950", "director": "구로사와 아키라", "comment": "인간 마음에 내리는 폭우 속에서 한줄기 햇빛을 찾다", "has_review": true}, {"title": "라이온 킹", "rating": 4.0, "year": "1994", "director": "", "comment": "", "has_review": false}, {"title": "라이트하우스", "rating": 4.0, "year": "2019", "director": "", "comment": "바다 위 빛과 함께 증유되는 우리의 정신, 기름칠된 비밀과 그 베일을 벗겨내는 등대의 빛.", "has_review": true}, {"title": "라이프 오브 파이", "rating": 4.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "레고 무비", "rating": 4.0, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "레퀴엠", "rating": 4.0, "year": "2000", "director": "", "comment": "", "has_review": false}, {"title": "리얼 스틸", "rating": 4.0, "year": "2011", "director": "", "comment": "", "has_review": false}, {"title": "마더", "rating": 4.0, "year": "2009", "director": "봉준호", "comment": "모성애를 한국사회라는 무대에서 극한까지 몰아붙이다", "has_review": true}, {"title": "메모리아", "rating": 4.0, "year": "2021", "director": "", "comment": "기억처럼 스며드는 오디오 미술관 산책. 낯선 공간, 낯선 소리, 낯선 기억, 그리고 이 속을 떠도는 꿈같은 영화.", "has_review": true}, {"title": "몬스터 주식회사", "rating": 4.0, "year": "2001", "director": "", "comment": "", "has_review": false}, {"title": "미나리", "rating": 4.0, "year": "2020", "director": "리 아이작 정", "comment": "", "has_review": false}, {"title": "박하사탕", "rating": 4.0, "year": "1999", "director": "이창동", "comment": "시대에 퇴적된 한 인물에 대한 파묘", "has_review": true}, {"title": "반지의 제왕: 두 개의 탑", "rating": 4.0, "year": "2002", "director": "", "comment": "", "has_review": false}, {"title": "베티블루 37.2", "rating": 4.0, "year": "1986", "director": "", "comment": "", "has_review": false}, {"title": "브루탈리스트", "rating": 4.0, "year": "2024", "director": "브레이디 코벳", "comment": "", "has_review": false}, {"title": "블랙 팬서", "rating": 4.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "설국열차", "rating": 4.0, "year": "2013", "director": "봉준호", "comment": "", "has_review": false}, {"title": "소나티네", "rating": 4.0, "year": "1993", "director": "", "comment": "", "has_review": false}, {"title": "송곳니", "rating": 4.0, "year": "2009", "director": "요르고스 란티모스", "comment": "", "has_review": false}, {"title": "스타워즈 에피소드 3: 시스의 복수", "rating": 4.0, "year": "2005", "director": "", "comment": "", "has_review": false}, {"title": "신세계", "rating": 4.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "씨너스 - 죄인들", "rating": 4.0, "year": "2025", "director": "라이언 쿠글러", "comment": "I lied to you 한 씬으로 이미 영화를 통해서만 가능한 음악의 한 측면을 보여줌", "has_review": true}, {"title": "아바타", "rating": 4.0, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "아이리시맨", "rating": 4.0, "year": "2019", "director": "마틴 스콜세이지", "comment": "", "has_review": false}, {"title": "애프터썬", "rating": 4.0, "year": "2022", "director": "샬롯 웰스", "comment": "", "has_review": false}, {"title": "어느 가족", "rating": 4.0, "year": "2018", "director": "고레에다 히로카즈", "comment": "", "has_review": false}, {"title": "어둠 속의 댄서", "rating": 4.0, "year": "2000", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "어벤져스", "rating": 4.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "어벤져스: 인피니티 워", "rating": 4.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "어쩔수가없다", "rating": 4.0, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "언더 더 스킨", "rating": 4.0, "year": "2013", "director": "조나단 글레이저", "comment": "", "has_review": false}, {"title": "업", "rating": 4.0, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "에브리씽 에브리웨어 올 앳 원스", "rating": 4.0, "year": "2022", "director": "", "comment": "", "has_review": false}, {"title": "에이 아이", "rating": 4.0, "year": "2001", "director": "", "comment": "", "has_review": false}, {"title": "엔드 오브 에반게리온", "rating": 4.0, "year": "1997", "director": "", "comment": "", "has_review": false}, {"title": "엘리펀트", "rating": 4.0, "year": "2003", "director": "구스 반 산트", "comment": "스크린의 경계를 지우는 유려한 롱테이크, 그 끝에 드러난 서눌한 먹구름", "has_review": true}, {"title": "오펜하이머", "rating": 4.0, "year": "2023", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "월-E", "rating": 4.0, "year": "2008", "director": "", "comment": "", "has_review": false}, {"title": "이레이저 헤드", "rating": 4.0, "year": "1977", "director": "", "comment": "", "has_review": false}, {"title": "이티", "rating": 4.0, "year": "1982", "director": "", "comment": "", "has_review": false}, {"title": "인사이드 르윈", "rating": 4.0, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "인셉션", "rating": 4.0, "year": "2010", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "조디악", "rating": 4.0, "year": "2007", "director": "데이빗 핀처", "comment": "미국판 살인의 추억", "has_review": true}, {"title": "죠스", "rating": 4.0, "year": "1975", "director": "", "comment": "", "has_review": false}, {"title": "죽은 시인의 사회", "rating": 4.0, "year": "1989", "director": "", "comment": "", "has_review": false}, {"title": "찰리와 초콜릿 공장", "rating": 4.0, "year": "2005", "director": "", "comment": "", "has_review": false}, {"title": "컨택트", "rating": 4.0, "year": "2016", "director": "드니 빌뇌브", "comment": "", "has_review": false}, {"title": "케빈에 대하여", "rating": 4.0, "year": "2011", "director": "", "comment": "", "has_review": false}, {"title": "콘클라베", "rating": 4.0, "year": "2024", "director": "", "comment": "대리석 프리즘에 갇혀 반사되는 무결성, 그것을 좇는 현대의 교회.", "has_review": true}, {"title": "콜 미 바이 유어 네임", "rating": 4.0, "year": "2017", "director": "루카 구아다니노", "comment": "", "has_review": false}, {"title": "택시 드라이버", "rating": 4.0, "year": "1976", "director": "마틴 스콜세이지", "comment": "", "has_review": false}, {"title": "터미네이터", "rating": 4.0, "year": "1984", "director": "", "comment": "", "has_review": false}, {"title": "토이 스토리 2", "rating": 4.0, "year": "1999", "director": "", "comment": "", "has_review": false}, {"title": "토이 스토리 3", "rating": 4.0, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "파이트 클럽", "rating": 4.0, "year": "1999", "director": "데이빗 핀처", "comment": "찔린다, 분명히 다시 꺼내볼 영화", "has_review": true}, {"title": "퍼니 게임", "rating": 4.0, "year": "1997", "director": "미하엘 하네케", "comment": "끌 수 있었음에도 끄지 않고 본 우리를 놀리는 게임.", "has_review": true}, {"title": "퍼펙트 블루", "rating": 4.0, "year": "1998", "director": "", "comment": "", "has_review": false}, {"title": "포레스트 검프", "rating": 4.0, "year": "1994", "director": "", "comment": "", "has_review": false}, {"title": "하울의 움직이는 성", "rating": 4.0, "year": "2004", "director": "", "comment": "", "has_review": false}, {"title": "헤어질 결심", "rating": 4.0, "year": "2022", "director": "박찬욱", "comment": "", "has_review": false}, {"title": "혹성탈출: 진화의 시작", "rating": 4.0, "year": "2011", "director": "", "comment": "", "has_review": false}, {"title": "화양연화 리마스터링", "rating": 4.0, "year": "2000", "director": "", "comment": "", "has_review": false}, {"title": "히든", "rating": 4.0, "year": "2005", "director": "미하엘 하네케", "comment": "", "has_review": false}, {"title": "8 마일", "rating": 3.5, "year": "2002", "director": "", "comment": "", "has_review": false}, {"title": "가디언즈 오브 갤럭시", "rating": 3.5, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "그래비티", "rating": 3.5, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "그린 나이트", "rating": 3.5, "year": "2021", "director": "데이빗 로워리", "comment": "기사로 죽기와 왕으로 살기 사이에서", "has_review": true}, {"title": "극장판 포켓몬스터: 뮤츠의 역습", "rating": 3.5, "year": "1998", "director": "", "comment": "", "has_review": false}, {"title": "나 홀로 집에", "rating": 3.5, "year": "1990", "director": "", "comment": "", "has_review": false}, {"title": "나는 전설이다", "rating": 3.5, "year": "2007", "director": "", "comment": "", "has_review": false}, {"title": "나를 찾아줘", "rating": 3.5, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "나이브스 아웃", "rating": 3.5, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "남산의 부장들", "rating": 3.5, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "남한산성", "rating": 3.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "놉", "rating": 3.5, "year": "2022", "director": "조던 필", "comment": "", "has_review": false}, {"title": "님포매니악 볼륨1", "rating": 3.5, "year": "2013", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "다음 소희", "rating": 3.5, "year": "2022", "director": "정주리", "comment": "", "has_review": false}, {"title": "더 웨일", "rating": 3.5, "year": "2022", "director": "대런 애로노프스키", "comment": "관심이 너무 많아서, 솔직하지 못해서 우리는 타인을 구원하기 어려운가보다", "has_review": true}, {"title": "덩케르크", "rating": 3.5, "year": "2017", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "드래곤 길들이기", "rating": 3.5, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "라라랜드", "rating": 3.5, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "레미제라블", "rating": 3.5, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "로그 원: 스타워즈 스토리", "rating": 3.5, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "마당을 나온 암탉", "rating": 3.5, "year": "2011", "director": "", "comment": "", "has_review": false}, {"title": "마션", "rating": 3.5, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "마이너리티 리포트", "rating": 3.5, "year": "2002", "director": "", "comment": "", "has_review": false}, {"title": "말레피센트", "rating": 3.5, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "맨 인 블랙", "rating": 3.5, "year": "1997", "director": "", "comment": "", "has_review": false}, {"title": "몸 값", "rating": 3.5, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "문라이즈 킹덤", "rating": 3.5, "year": "2012", "director": "웨스 앤더슨", "comment": "", "has_review": false}, {"title": "미드소마", "rating": 3.5, "year": "2019", "director": "아리 애스터", "comment": "", "has_review": false}, {"title": "미키 17", "rating": 3.5, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "백룸", "rating": 3.5, "year": "2026", "director": "", "comment": "", "has_review": false}, {"title": "벼랑 위의 포뇨", "rating": 3.5, "year": "2008", "director": "", "comment": "", "has_review": false}, {"title": "보헤미안 랩소디", "rating": 3.5, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "부고니아", "rating": 3.5, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "비긴 어게인", "rating": 3.5, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "빌리 엘리어트", "rating": 3.5, "year": "2000", "director": "", "comment": "", "has_review": false}, {"title": "살인마 잭의 집", "rating": 3.5, "year": "2018", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "세 얼간이", "rating": 3.5, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "세계의 주인", "rating": 3.5, "year": "2024", "director": "윤가은", "comment": "우리가 지녀야 할 시선에 대해 생각해보게함", "has_review": true}, {"title": "셔터 아일랜드", "rating": 3.5, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "소셜 네트워크", "rating": 3.5, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "스파이더맨", "rating": 3.5, "year": "2002", "director": "", "comment": "", "has_review": false}, {"title": "스파이더맨: 노 웨이 홈", "rating": 3.5, "year": "2021", "director": "", "comment": "", "has_review": false}, {"title": "식스 센스", "rating": 3.5, "year": "1999", "director": "", "comment": "", "has_review": false}, {"title": "아바타: 물의 길", "rating": 3.5, "year": "2022", "director": "", "comment": "", "has_review": false}, {"title": "아이언맨", "rating": 3.5, "year": "2008", "director": "", "comment": "", "has_review": false}, {"title": "악마는 프라다를 입는다", "rating": 3.5, "year": "2006", "director": "", "comment": "", "has_review": false}, {"title": "애스터로이드 시티", "rating": 3.5, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "애프터 양", "rating": 3.5, "year": "2021", "director": "코고나다", "comment": "", "has_review": false}, {"title": "어벤져스: 엔드게임", "rating": 3.5, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "옵세션", "rating": 3.5, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "위플래쉬", "rating": 3.5, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "이미테이션 게임", "rating": 3.5, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "이웃집 토토로", "rating": 3.5, "year": "1988", "director": "", "comment": "", "has_review": false}, {"title": "이집트 왕자", "rating": 3.5, "year": "1998", "director": "", "comment": "", "has_review": false}, {"title": "주토피아", "rating": 3.5, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "캐리비안의 해적 - 블랙 펄의 저주", "rating": 3.5, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "코렐라인", "rating": 3.5, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "콘스탄틴", "rating": 3.5, "year": "2005", "director": "", "comment": "", "has_review": false}, {"title": "크루엘라", "rating": 3.5, "year": "2021", "director": "", "comment": "", "has_review": false}, {"title": "클래식", "rating": 3.5, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "탑건", "rating": 3.5, "year": "1986", "director": "", "comment": "", "has_review": false}, {"title": "탑건: 매버릭", "rating": 3.5, "year": "2022", "director": "", "comment": "", "has_review": false}, {"title": "택시운전사", "rating": 3.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "테넷", "rating": 3.5, "year": "2020", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "토르: 라그나로크", "rating": 3.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "토이 스토리 4", "rating": 3.5, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "파이란", "rating": 3.5, "year": "2001", "director": "", "comment": "", "has_review": false}, {"title": "팬텀 스레드", "rating": 3.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "퍼시픽 림", "rating": 3.5, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "펜텀 스레드", "rating": 3.5, "year": "", "director": "폴 토마스 앤더슨", "comment": "사랑의 경사와 써스펜스의 위사로 우아한 드레스를 직조해내는 거장의 손길.", "has_review": true}, {"title": "포제션", "rating": 3.5, "year": "1981", "director": "", "comment": "", "has_review": false}, {"title": "프로메테우스", "rating": 3.5, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "피아니스트", "rating": 3.5, "year": "2002", "director": "", "comment": "", "has_review": false}, {"title": "핑크 플로이드의 벽", "rating": 3.5, "year": "1982", "director": "알란 파커", "comment": "핑크 플로이드의 노래 가사들을 이해하기 위한 가장 쉬운 방법. 기본적으로 음악이 너무 좋다", "has_review": true}, {"title": "1987", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "23 아이덴티티", "rating": 3.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "겨울왕국", "rating": 3.0, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "공동경비구역 JSA", "rating": 3.0, "year": "2000", "director": "", "comment": "", "has_review": false}, {"title": "국제시장", "rating": 3.0, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "그것", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "극한직업", "rating": 3.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "글래디에이터", "rating": 3.0, "year": "2000", "director": "", "comment": "", "has_review": false}, {"title": "김씨 표류기", "rating": 3.0, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "너의 이름은.", "rating": 3.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "닥터 스트레인지: 대혼돈의 멀티버스", "rating": 3.0, "year": "2022", "director": "", "comment": "", "has_review": false}, {"title": "더 킹", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "명탐정 코난: 시한장치의 마천루", "rating": 3.0, "year": "1997", "director": "", "comment": "", "has_review": false}, {"title": "모아나", "rating": 3.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "베놈", "rating": 3.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "부산행", "rating": 3.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "빅 히어로", "rating": 3.0, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "살인자의 기억법", "rating": 3.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "서울의 봄", "rating": 3.0, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "서치", "rating": 3.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "슈퍼 마리오 브라더스", "rating": 3.0, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "스쿨 오브 락", "rating": 3.0, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈 에피소드 1: 보이지 않는 위험", "rating": 3.0, "year": "1999", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈 에피소드 2: 클론의 습격", "rating": 3.0, "year": "2002", "director": "", "comment": "", "has_review": false}, {"title": "스파이더맨 2", "rating": 3.0, "year": "2004", "director": "", "comment": "", "has_review": false}, {"title": "스파이더맨: 홈커밍", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "승부", "rating": 3.0, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "신과함께-죄와 벌", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "알라딘", "rating": 3.0, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "앤트맨", "rating": 3.0, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "어스", "rating": 3.0, "year": "2019", "director": "조던 필", "comment": "", "has_review": false}, {"title": "엘리멘탈", "rating": 3.0, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "옥자", "rating": 3.0, "year": "2017", "director": "봉준호", "comment": "", "has_review": false}, {"title": "위대한 쇼맨", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "유령 신부", "rating": 3.0, "year": "2005", "director": "", "comment": "", "has_review": false}, {"title": "유전", "rating": 3.0, "year": "2018", "director": "아리 애스터", "comment": "", "has_review": false}, {"title": "인사이드 아웃", "rating": 3.0, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "인크레더블", "rating": 3.0, "year": "2004", "director": "", "comment": "", "has_review": false}, {"title": "인턴", "rating": 3.0, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "장화, 홍련", "rating": 3.0, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "조제, 호랑이 그리고 물고기들", "rating": 3.0, "year": "2003", "director": "", "comment": "", "has_review": false}, {"title": "주먹왕 랄프", "rating": 3.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "추격자", "rating": 3.0, "year": "2007", "director": "", "comment": "", "has_review": false}, {"title": "케이팝 데몬 헌터스", "rating": 3.0, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "코코", "rating": 3.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "콰이어트 플레이스", "rating": 3.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "킹스 스피치", "rating": 3.0, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "터미네이터 2", "rating": 3.0, "year": "1991", "director": "", "comment": "", "has_review": false}, {"title": "파묘", "rating": 3.0, "year": "2024", "director": "", "comment": "", "has_review": false}, {"title": "퍼시잭슨과 번개 도둑", "rating": 3.0, "year": "2010", "director": "", "comment": "", "has_review": false}, {"title": "펀치 드렁크 러브", "rating": 3.0, "year": "2002", "director": "폴 토마스 앤더슨", "comment": "아이폰 진동 소리와도 비슷한 배경 음악이 주인공의 산만한 정신상태를 관객까지 체험시키는 영화.", "has_review": true}, {"title": "하얼빈", "rating": 3.0, "year": "2024", "director": "", "comment": "", "has_review": false}, {"title": "헝거게임: 캣칭 파이어", "rating": 3.0, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "7번방의 선물", "rating": 2.5, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "국가대표", "rating": 2.5, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "극장판 귀멸의 칼날: 무한열차편", "rating": 2.5, "year": "2020", "director": "", "comment": "", "has_review": false}, {"title": "내가 사는 피부", "rating": 2.5, "year": "2011", "director": "", "comment": "", "has_review": false}, {"title": "돈 룩 업", "rating": 2.5, "year": "2021", "director": "", "comment": "", "has_review": false}, {"title": "레디 플레이어 원", "rating": 2.5, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "말모이", "rating": 2.5, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "명량", "rating": 2.5, "year": "2014", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈: 깨어난 포스", "rating": 2.5, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈: 라스트 제다이", "rating": 2.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "신과함께-인과 연", "rating": 2.5, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "아마겟돈", "rating": 2.5, "year": "1998", "director": "", "comment": "", "has_review": false}, {"title": "왕과 사는 남자", "rating": 2.5, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "웡카", "rating": 2.5, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "좀비딸", "rating": 2.5, "year": "2025", "director": "", "comment": "", "has_review": false}, {"title": "커런트 워", "rating": 2.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "파파로티", "rating": 2.5, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "공조", "rating": 2.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "돈", "rating": 2.0, "year": "2018", "director": "", "comment": "", "has_review": false}, {"title": "모가디슈", "rating": 2.0, "year": "2020", "director": "", "comment": "", "has_review": false}, {"title": "범죄도시", "rating": 2.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "봉오동 전투", "rating": 2.0, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "셜록: 유령신부", "rating": 2.0, "year": "2015", "director": "", "comment": "", "has_review": false}, {"title": "스타워즈: 라이즈 오브 스카이워커", "rating": 2.0, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "엑시트", "rating": 2.0, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "외계+인 1부", "rating": 2.0, "year": "2022", "director": "", "comment": "", "has_review": false}, {"title": "청년경찰", "rating": 2.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "킬러의 보디가드", "rating": 2.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "터널", "rating": 2.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "토르: 다크 월드", "rating": 2.0, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "패신저스", "rating": 2.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "해피 데스데이", "rating": 2.0, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "곤지암", "rating": 1.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "군함도", "rating": 1.5, "year": "2017", "director": "", "comment": "", "has_review": false}, {"title": "길복순", "rating": 1.5, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "백두산", "rating": 1.5, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "범죄도시4", "rating": 1.5, "year": "2023", "director": "", "comment": "", "has_review": false}, {"title": "승리호", "rating": 1.5, "year": "2020", "director": "", "comment": "", "has_review": false}, {"title": "해운대", "rating": 1.5, "year": "2009", "director": "", "comment": "", "has_review": false}, {"title": "형", "rating": 1.5, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "감기", "rating": 1.0, "year": "2013", "director": "", "comment": "", "has_review": false}, {"title": "반도", "rating": 1.0, "year": "2020", "director": "", "comment": "", "has_review": false}, {"title": "연가시", "rating": 1.0, "year": "2012", "director": "", "comment": "", "has_review": false}, {"title": "캡틴 마블", "rating": 1.0, "year": "2019", "director": "", "comment": "", "has_review": false}, {"title": "판도라", "rating": 1.0, "year": "2016", "director": "", "comment": "", "has_review": false}, {"title": "--", "rating": 1.0, "year": "", "director": "", "comment": "", "has_review": false}, {"title": "80_Maps/Cinema & Music MOC", "rating": 1.0, "year": "", "director": "", "comment": "", "has_review": false}], "total_count": 290, "review_count": 26, "rating_system": {"0.5": "사회에 해로운 메시지, 존재 의미를 인정할 수 없는 영화", "1.0": "졸작. 감독이나 배우에게 기부하고 싶은게 아니라면 굳이?", "1": "졸작. 감독이나 배우에게 기부하고 싶은게 아니라면 굳이?", "1.5": "돈을 주고 봐라해도 시간이 아까운 영화", "2.0": "오로지 시간 때우기가 목적이라면 봐도 되는 영화", "2": "오로지 시간 때우기가 목적이라면 봐도 되는 영화", "2.5": "누구랑 같이봤을때 나쁘진 않은 정도, 혼자서는 굳이", "3.0": "극장에서의 시간을 온전히 즐기고 나올 수 있는 영화. 여기서 부터 추천", "3": "극장에서의 시간을 온전히 즐기고 나올 수 있는 영화. 여기서 부터 추천", "3.5": "수작. 메시지나 형식, 혹은 순수한 재미 중 하나 이상이 확실한 영화.", "4.0": "강렬한 인상을 남기는 영화, 취향과 상황에 따라 충분히 명작이라 불릴 수 있는 영화", "4": "강렬한 인상을 남기는 영화, 취향과 상황에 따라 충분히 명작이라 불릴 수 있는 영화", "4.5": "명작, 보고나면 많은 것들을 배우거나 느낄 수 있는 영화", "5.0": "올타임 GOAT, 살면서 꼭 봐야된다고 생각하는 영화 or 4.5 인 영화지만 내 취향이 아주 강하게 반영된 경우", "5": "올타임 GOAT, 살면서 꼭 봐야된다고 생각하는 영화 or 4.5 인 영화지만 내 취향이 아주 강하게 반영된 경우"}, "watchlist": [{"title": "아무르", "director": "미하엘 하네케", "platforms": ["넷플"], "raw": "아무르(넷플)"}, {"title": "하얀 리본", "director": "미하엘 하네케", "platforms": ["티빙", "왓챠", "웨이브"], "raw": "하얀 리본(티빙,왓챠,웨이브)"}, {"title": "도그빌", "director": "라스 폰 트리에", "platforms": ["티빙", "왓챠"], "raw": "도그빌(티빙,왓챠)"}, {"title": "멜랑콜리아", "director": "라스 폰 트리에", "platforms": ["웨이브"], "raw": "멜랑콜리아(웨이브)"}, {"title": "마스터", "director": "PTA", "platforms": ["티빙", "왓챠", "웨이브"], "raw": "마스터(티빙,왓챠,웨이브)"}, {"title": "매그놀리아", "director": "PTA", "platforms": [], "raw": "매그놀리아"}, {"title": "데어 윌 비 블러드", "director": "PTA", "platforms": ["왓챠", "티빙"], "raw": "데어 윌 비 블러드(왓챠, 티빙)"}, {"title": "원더풀 라이프", "director": "고레에다 히로카즈", "platforms": [], "raw": "원더풀 라이프"}, {"title": "시", "director": "이창동", "platforms": ["왓챠", "웨이브", "티빙"], "raw": "시(왓챠,웨이브,티빙)"}, {"title": "초록물고기", "director": "이창동", "platforms": ["넷플"], "raw": "초록물고기(넷플)"}, {"title": "오아시스", "director": "이창동", "platforms": ["왓챠", "티빙"], "raw": "오아시스(왓챠,티빙)"}, {"title": "멀홀랜드 드라이브", "director": "데이비드 린치", "platforms": [], "raw": "멀홀랜드 드라이브"}, {"title": "4개월", "director": "크스티안 문쥬", "platforms": [], "raw": "4개월"}, {"title": "3주 그리고 2일", "director": "크스티안 문쥬", "platforms": [], "raw": "3주 그리고 2일"}, {"title": "존 오브 인터레스트", "director": "조나단 글레이저", "platforms": ["쿠팡", "웨이브", "왓챠"], "raw": "존 오브 인터레스트(쿠팡,웨이브,왓챠)"}, {"title": "포스 마쥬어", "director": "루벤 외스틀룬드", "platforms": [], "raw": "포스 마쥬어"}, {"title": "더 스퀘어", "director": "루벤 외스틀룬드", "platforms": ["웨이브", "티빙"], "raw": "더 스퀘어(웨이브,티빙)"}, {"title": "더 위치", "director": "로버트 에거스", "platforms": ["왓챠"], "raw": "더 위치(왓챠)"}, {"title": "고스트 스토리", "director": "데이빗 로워리", "platforms": ["왓챠"], "raw": "고스트 스토리(왓챠)"}, {"title": "이니셰린의 벤시", "director": "마틴 맥도나", "platforms": ["디즈니"], "raw": "이니셰린의 벤시(디즈니)"}, {"title": "가버나움", "director": "나딘 라바키", "platforms": ["넷플"], "raw": "가버나움(넷플)"}, {"title": "바바라", "director": "크리스티안 페촐트", "platforms": [], "raw": "바바라"}, {"title": "피닉스", "director": "크리스티안 페촐트", "platforms": [], "raw": "피닉스"}, {"title": "드라이브 마이 카", "director": "하마구치 류스케", "platforms": [], "raw": "드라이브 마이 카"}, {"title": "아사코", "director": "하마구치 류스케", "platforms": [], "raw": "아사코"}, {"title": "씨민과 나데르의 별거", "director": "아쉬가르 파라디", "platforms": [], "raw": "씨민과 나데르의 별거"}, {"title": "스틸 라이프", "director": "지아장커", "platforms": [], "raw": "스틸 라이프"}, {"title": "자마", "director": "루크레시아 마르텔", "platforms": [], "raw": "자마"}, {"title": "리턴", "director": "안드레이 즈바이긴체프", "platforms": [], "raw": "리턴"}, {"title": "타오르는 여인의 초상", "director": "셀린 시아마", "platforms": [], "raw": "타오르는 여인의 초상"}, {"title": "파벨만스", "director": "스티븐 스필버그", "platforms": ["넷플", "티빙", "왓챠"], "raw": "파벨만스(넷플,티빙,왓챠)"}, {"title": "열대병", "director": "아피찻퐁 위라세타꾼", "platforms": [], "raw": "열대병"}, {"title": "엉클 분미", "director": "아피찻퐁 위라세타꾼", "platforms": [], "raw": "엉클 분미"}, {"title": "보이후드", "director": "리처드 링클레이터", "platforms": ["왓챠"], "raw": "보이후드(왓챠)"}, {"title": "안드레이 타르코프스키", "director": "고전", "platforms": [], "raw": "안드레이 타르코프스키"}, {"title": "루이스 부뉴엘", "director": "고전", "platforms": [], "raw": "루이스 부뉴엘"}, {"title": "잉마르 베리만", "director": "고전", "platforms": [], "raw": "잉마르 베리만"}, {"title": "벨라 타르)", "director": "극단적 예술영화", "platforms": ["사탄탱고(7시간"], "raw": "벨라 타르(사탄탱고(7시간))"}, {"title": "알레한드로 조도로프스키", "director": "극단적 예술영화", "platforms": [], "raw": "알레한드로 조도로프스키"}], "watchlist_count": 39, "director_stats": {"스탠리 큐브릭": {"name": "스탠리 큐브릭", "watched_count": 1, "ratings": [5.0], "watched_movies": [{"title": "2001 스페이스 오디세이", "rating": 5.0, "year": "1968", "director": "스탠리 큐브릭", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 5.0}, "박찬욱": {"name": "박찬욱", "watched_count": 2, "ratings": [5.0, 4.0], "watched_movies": [{"title": "올드보이", "rating": 5.0, "year": "2003", "director": "박찬욱", "comment": "복수의 우로보로스가 낳은 알 속 괴물, 그것에게도 살 권리가 있을까", "has_review": true}, {"title": "헤어질 결심", "rating": 4.0, "year": "2022", "director": "박찬욱", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.5}, "봉준호": {"name": "봉준호", "watched_count": 6, "ratings": [5.0, 5.0, 4.0, 4.0, 4.0, 3.0], "watched_movies": [{"title": "기생충", "rating": 5.0, "year": "2019", "director": "봉준호", "comment": "", "has_review": false}, {"title": "살인의 추억", "rating": 5.0, "year": "2003", "director": "봉준호", "comment": "", "has_review": false}, {"title": "괴물", "rating": 4.0, "year": "2023", "director": "봉준호", "comment": "", "has_review": false}, {"title": "마더", "rating": 4.0, "year": "2009", "director": "봉준호", "comment": "모성애를 한국사회라는 무대에서 극한까지 몰아붙이다", "has_review": true}, {"title": "설국열차", "rating": 4.0, "year": "2013", "director": "봉준호", "comment": "", "has_review": false}, {"title": "옥자", "rating": 3.0, "year": "2017", "director": "봉준호", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.17}, "크리스토퍼 놀란": {"name": "크리스토퍼 놀란", "watched_count": 6, "ratings": [5.0, 4.5, 4.0, 4.0, 3.5, 3.5], "watched_movies": [{"title": "인터스텔라", "rating": 5.0, "year": "2014", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "메멘토", "rating": 4.5, "year": "2000", "director": "크리스토퍼 놀란", "comment": "풀롯의 마술사라는 별명이 단번에 납득가는 충격적 결말", "has_review": true}, {"title": "오펜하이머", "rating": 4.0, "year": "2023", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "인셉션", "rating": 4.0, "year": "2010", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "덩케르크", "rating": 3.5, "year": "2017", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}, {"title": "테넷", "rating": 3.5, "year": "2020", "director": "크리스토퍼 놀란", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.08}, "요르고스 란티모스": {"name": "요르고스 란티모스", "watched_count": 4, "ratings": [5.0, 4.0, 4.0, 4.0], "watched_movies": [{"title": "킬링 디어", "rating": 5.0, "year": "2017", "director": "요르고스 란티모스", "comment": "", "has_review": false}, {"title": "가여운 것들", "rating": 4.0, "year": "2026", "director": "요르고스 란티모스", "comment": "눈을 때지 못하는 미장센, 뇌를 끌 수 없는 전개 그 속에서 같이 성장한다", "has_review": true}, {"title": "더 랍스터", "rating": 4.0, "year": "2015", "director": "요르고스 란티모스", "comment": "동조(同調)라는 매끄러운 단일 파면을 위해 신체의 거세와 굴절을 강요하는 전체주의적 우화.", "has_review": true}, {"title": "송곳니", "rating": 4.0, "year": "2009", "director": "요르고스 란티모스", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.25}, "안드레이 즈바이긴체프": {"name": "안드레이 즈바이긴체프", "watched_count": 1, "ratings": [4.5], "watched_movies": [{"title": "리바이어던", "rating": 4.5, "year": "2014", "director": "안드레이 즈바이긴체프", "comment": "술에 취한채 국가라는 레비아탄에게 잡아먹이는 체험. 이 모든 것들에 이유라도 있었으면...", "has_review": true}], "watchlist_movies": [{"title": "리턴", "director": "안드레이 즈바이긴체프", "platforms": [], "raw": "리턴"}], "avg_rating": 4.5}, "이창동": {"name": "이창동", "watched_count": 3, "ratings": [4.5, 4.5, 4.0], "watched_movies": [{"title": "밀양", "rating": 4.5, "year": "2007", "director": "이창동", "comment": "", "has_review": false}, {"title": "버닝", "rating": 4.5, "year": "2018", "director": "이창동", "comment": "", "has_review": false}, {"title": "박하사탕", "rating": 4.0, "year": "1999", "director": "이창동", "comment": "시대에 퇴적된 한 인물에 대한 파묘", "has_review": true}], "watchlist_movies": [{"title": "시", "director": "이창동", "platforms": ["왓챠", "웨이브", "티빙"], "raw": "시(왓챠,웨이브,티빙)"}, {"title": "초록물고기", "director": "이창동", "platforms": ["넷플"], "raw": "초록물고기(넷플)"}, {"title": "오아시스", "director": "이창동", "platforms": ["왓챠", "티빙"], "raw": "오아시스(왓챠,티빙)"}], "avg_rating": 4.33}, "고레에다 히로카즈": {"name": "고레에다 히로카즈", "watched_count": 2, "ratings": [4.5, 4.0], "watched_movies": [{"title": "아무도 모른다", "rating": 4.5, "year": "2004", "director": "고레에다 히로카즈", "comment": "", "has_review": false}, {"title": "어느 가족", "rating": 4.0, "year": "2018", "director": "고레에다 히로카즈", "comment": "", "has_review": false}], "watchlist_movies": [{"title": "원더풀 라이프", "director": "고레에다 히로카즈", "platforms": [], "raw": "원더풀 라이프"}], "avg_rating": 4.25}, "라스 폰 트리에": {"name": "라스 폰 트리에", "watched_count": 4, "ratings": [4.5, 4.0, 3.5, 3.5], "watched_movies": [{"title": "안티크라이스트", "rating": 4.5, "year": "2009", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "어둠 속의 댄서", "rating": 4.0, "year": "2000", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "님포매니악 볼륨1", "rating": 3.5, "year": "2013", "director": "라스 폰 트리에", "comment": "", "has_review": false}, {"title": "살인마 잭의 집", "rating": 3.5, "year": "2018", "director": "라스 폰 트리에", "comment": "", "has_review": false}], "watchlist_movies": [{"title": "도그빌", "director": "라스 폰 트리에", "platforms": ["티빙", "왓챠"], "raw": "도그빌(티빙,왓챠)"}, {"title": "멜랑콜리아", "director": "라스 폰 트리에", "platforms": ["웨이브"], "raw": "멜랑콜리아(웨이브)"}], "avg_rating": 3.88}, "션 베이커": {"name": "션 베이커", "watched_count": 1, "ratings": [4.5], "watched_movies": [{"title": "플로리다 프로젝트", "rating": 4.5, "year": "2017", "director": "션 베이커", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.5}, "레오 카락스": {"name": "레오 카락스", "watched_count": 1, "ratings": [4.5], "watched_movies": [{"title": "홀리 모터스", "rating": 4.5, "year": "2012", "director": "레오 카락스", "comment": "무한한 세트장 속을 살아가는 한 배우의 일기장. 연기와 현실 사이의 붕괴와 그걸 대하는 관객의 태도에 대한 감독의 아주 개인적인 찬사.", "has_review": true}], "watchlist_movies": [], "avg_rating": 4.5}, "쥘리아 뒤쿠르노": {"name": "쥘리아 뒤쿠르노", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "티탄", "rating": 4.0, "year": "", "director": "쥘리아 뒤쿠르노", "comment": "부성애, 성욕의 한계점을 엿본 느낌.", "has_review": true}], "watchlist_movies": [], "avg_rating": 4.0}, "조던 필": {"name": "조던 필", "watched_count": 3, "ratings": [4.0, 3.5, 3.0], "watched_movies": [{"title": "겟 아웃", "rating": 4.0, "year": "2017", "director": "조던 필", "comment": "", "has_review": false}, {"title": "놉", "rating": 3.5, "year": "2022", "director": "조던 필", "comment": "", "has_review": false}, {"title": "어스", "rating": 3.0, "year": "2019", "director": "조던 필", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 3.5}, "웨스 앤더슨": {"name": "웨스 앤더슨", "watched_count": 2, "ratings": [4.0, 3.5], "watched_movies": [{"title": "그랜드 부다페스트 호텔", "rating": 4.0, "year": "2014", "director": "웨스 앤더슨", "comment": "우리가 구전에 부여하는 환상적 노스탤지아", "has_review": true}, {"title": "문라이즈 킹덤", "rating": 3.5, "year": "2012", "director": "웨스 앤더슨", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 3.75}, "드니 빌뇌브": {"name": "드니 빌뇌브", "watched_count": 2, "ratings": [4.0, 4.0], "watched_movies": [{"title": "듄", "rating": 4.0, "year": "2021", "director": "드니 빌뇌브", "comment": "", "has_review": false}, {"title": "컨택트", "rating": 4.0, "year": "2016", "director": "드니 빌뇌브", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.0}, "구로사와 아키라": {"name": "구로사와 아키라", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "라쇼몽", "rating": 4.0, "year": "1950", "director": "구로사와 아키라", "comment": "인간 마음에 내리는 폭우 속에서 한줄기 햇빛을 찾다", "has_review": true}], "watchlist_movies": [], "avg_rating": 4.0}, "리 아이작 정": {"name": "리 아이작 정", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "미나리", "rating": 4.0, "year": "2020", "director": "리 아이작 정", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.0}, "브레이디 코벳": {"name": "브레이디 코벳", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "브루탈리스트", "rating": 4.0, "year": "2024", "director": "브레이디 코벳", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.0}, "라이언 쿠글러": {"name": "라이언 쿠글러", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "씨너스 - 죄인들", "rating": 4.0, "year": "2025", "director": "라이언 쿠글러", "comment": "I lied to you 한 씬으로 이미 영화를 통해서만 가능한 음악의 한 측면을 보여줌", "has_review": true}], "watchlist_movies": [], "avg_rating": 4.0}, "마틴 스콜세이지": {"name": "마틴 스콜세이지", "watched_count": 2, "ratings": [4.0, 4.0], "watched_movies": [{"title": "아이리시맨", "rating": 4.0, "year": "2019", "director": "마틴 스콜세이지", "comment": "", "has_review": false}, {"title": "택시 드라이버", "rating": 4.0, "year": "1976", "director": "마틴 스콜세이지", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.0}, "샬롯 웰스": {"name": "샬롯 웰스", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "애프터썬", "rating": 4.0, "year": "2022", "director": "샬롯 웰스", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.0}, "조나단 글레이저": {"name": "조나단 글레이저", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "언더 더 스킨", "rating": 4.0, "year": "2013", "director": "조나단 글레이저", "comment": "", "has_review": false}], "watchlist_movies": [{"title": "존 오브 인터레스트", "director": "조나단 글레이저", "platforms": ["쿠팡", "웨이브", "왓챠"], "raw": "존 오브 인터레스트(쿠팡,웨이브,왓챠)"}], "avg_rating": 4.0}, "구스 반 산트": {"name": "구스 반 산트", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "엘리펀트", "rating": 4.0, "year": "2003", "director": "구스 반 산트", "comment": "스크린의 경계를 지우는 유려한 롱테이크, 그 끝에 드러난 서눌한 먹구름", "has_review": true}], "watchlist_movies": [], "avg_rating": 4.0}, "데이빗 핀처": {"name": "데이빗 핀처", "watched_count": 2, "ratings": [4.0, 4.0], "watched_movies": [{"title": "조디악", "rating": 4.0, "year": "2007", "director": "데이빗 핀처", "comment": "미국판 살인의 추억", "has_review": true}, {"title": "파이트 클럽", "rating": 4.0, "year": "1999", "director": "데이빗 핀처", "comment": "찔린다, 분명히 다시 꺼내볼 영화", "has_review": true}], "watchlist_movies": [], "avg_rating": 4.0}, "루카 구아다니노": {"name": "루카 구아다니노", "watched_count": 1, "ratings": [4.0], "watched_movies": [{"title": "콜 미 바이 유어 네임", "rating": 4.0, "year": "2017", "director": "루카 구아다니노", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 4.0}, "미하엘 하네케": {"name": "미하엘 하네케", "watched_count": 2, "ratings": [4.0, 4.0], "watched_movies": [{"title": "퍼니 게임", "rating": 4.0, "year": "1997", "director": "미하엘 하네케", "comment": "끌 수 있었음에도 끄지 않고 본 우리를 놀리는 게임.", "has_review": true}, {"title": "히든", "rating": 4.0, "year": "2005", "director": "미하엘 하네케", "comment": "", "has_review": false}], "watchlist_movies": [{"title": "아무르", "director": "미하엘 하네케", "platforms": ["넷플"], "raw": "아무르(넷플)"}, {"title": "하얀 리본", "director": "미하엘 하네케", "platforms": ["티빙", "왓챠", "웨이브"], "raw": "하얀 리본(티빙,왓챠,웨이브)"}], "avg_rating": 4.0}, "데이빗 로워리": {"name": "데이빗 로워리", "watched_count": 1, "ratings": [3.5], "watched_movies": [{"title": "그린 나이트", "rating": 3.5, "year": "2021", "director": "데이빗 로워리", "comment": "기사로 죽기와 왕으로 살기 사이에서", "has_review": true}], "watchlist_movies": [{"title": "고스트 스토리", "director": "데이빗 로워리", "platforms": ["왓챠"], "raw": "고스트 스토리(왓챠)"}], "avg_rating": 3.5}, "정주리": {"name": "정주리", "watched_count": 1, "ratings": [3.5], "watched_movies": [{"title": "다음 소희", "rating": 3.5, "year": "2022", "director": "정주리", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 3.5}, "대런 애로노프스키": {"name": "대런 애로노프스키", "watched_count": 1, "ratings": [3.5], "watched_movies": [{"title": "더 웨일", "rating": 3.5, "year": "2022", "director": "대런 애로노프스키", "comment": "관심이 너무 많아서, 솔직하지 못해서 우리는 타인을 구원하기 어려운가보다", "has_review": true}], "watchlist_movies": [], "avg_rating": 3.5}, "아리 애스터": {"name": "아리 애스터", "watched_count": 2, "ratings": [3.5, 3.0], "watched_movies": [{"title": "미드소마", "rating": 3.5, "year": "2019", "director": "아리 애스터", "comment": "", "has_review": false}, {"title": "유전", "rating": 3.0, "year": "2018", "director": "아리 애스터", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 3.25}, "윤가은": {"name": "윤가은", "watched_count": 1, "ratings": [3.5], "watched_movies": [{"title": "세계의 주인", "rating": 3.5, "year": "2024", "director": "윤가은", "comment": "우리가 지녀야 할 시선에 대해 생각해보게함", "has_review": true}], "watchlist_movies": [], "avg_rating": 3.5}, "코고나다": {"name": "코고나다", "watched_count": 1, "ratings": [3.5], "watched_movies": [{"title": "애프터 양", "rating": 3.5, "year": "2021", "director": "코고나다", "comment": "", "has_review": false}], "watchlist_movies": [], "avg_rating": 3.5}, "폴 토마스 앤더슨": {"name": "폴 토마스 앤더슨", "watched_count": 2, "ratings": [3.5, 3.0], "watched_movies": [{"title": "펜텀 스레드", "rating": 3.5, "year": "", "director": "폴 토마스 앤더슨", "comment": "사랑의 경사와 써스펜스의 위사로 우아한 드레스를 직조해내는 거장의 손길.", "has_review": true}, {"title": "펀치 드렁크 러브", "rating": 3.0, "year": "2002", "director": "폴 토마스 앤더슨", "comment": "아이폰 진동 소리와도 비슷한 배경 음악이 주인공의 산만한 정신상태를 관객까지 체험시키는 영화.", "has_review": true}], "watchlist_movies": [{"title": "마스터", "director": "PTA", "platforms": ["티빙", "왓챠", "웨이브"], "raw": "마스터(티빙,왓챠,웨이브)"}, {"title": "매그놀리아", "director": "PTA", "platforms": [], "raw": "매그놀리아"}, {"title": "데어 윌 비 블러드", "director": "PTA", "platforms": ["왓챠", "티빙"], "raw": "데어 윌 비 블러드(왓챠, 티빙)"}], "avg_rating": 3.25}, "알란 파커": {"name": "알란 파커", "watched_count": 1, "ratings": [3.5], "watched_movies": [{"title": "핑크 플로이드의 벽", "rating": 3.5, "year": "1982", "director": "알란 파커", "comment": "핑크 플로이드의 노래 가사들을 이해하기 위한 가장 쉬운 방법. 기본적으로 음악이 너무 좋다", "has_review": true}], "watchlist_movies": [], "avg_rating": 3.5}, "데이비드 린치": {"name": "데이비드 린치", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "멀홀랜드 드라이브", "director": "데이비드 린치", "platforms": [], "raw": "멀홀랜드 드라이브"}], "avg_rating": 0.0}, "크스티안 문쥬": {"name": "크스티안 문쥬", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "4개월", "director": "크스티안 문쥬", "platforms": [], "raw": "4개월"}, {"title": "3주 그리고 2일", "director": "크스티안 문쥬", "platforms": [], "raw": "3주 그리고 2일"}], "avg_rating": 0.0}, "루벤 외스틀룬드": {"name": "루벤 외스틀룬드", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "포스 마쥬어", "director": "루벤 외스틀룬드", "platforms": [], "raw": "포스 마쥬어"}, {"title": "더 스퀘어", "director": "루벤 외스틀룬드", "platforms": ["웨이브", "티빙"], "raw": "더 스퀘어(웨이브,티빙)"}], "avg_rating": 0.0}, "로버트 에거스": {"name": "로버트 에거스", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "더 위치", "director": "로버트 에거스", "platforms": ["왓챠"], "raw": "더 위치(왓챠)"}], "avg_rating": 0.0}, "마틴 맥도나": {"name": "마틴 맥도나", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "이니셰린의 벤시", "director": "마틴 맥도나", "platforms": ["디즈니"], "raw": "이니셰린의 벤시(디즈니)"}], "avg_rating": 0.0}, "나딘 라바키": {"name": "나딘 라바키", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "가버나움", "director": "나딘 라바키", "platforms": ["넷플"], "raw": "가버나움(넷플)"}], "avg_rating": 0.0}, "크리스티안 페촐트": {"name": "크리스티안 페촐트", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "바바라", "director": "크리스티안 페촐트", "platforms": [], "raw": "바바라"}, {"title": "피닉스", "director": "크리스티안 페촐트", "platforms": [], "raw": "피닉스"}], "avg_rating": 0.0}, "하마구치 류스케": {"name": "하마구치 류스케", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "드라이브 마이 카", "director": "하마구치 류스케", "platforms": [], "raw": "드라이브 마이 카"}, {"title": "아사코", "director": "하마구치 류스케", "platforms": [], "raw": "아사코"}], "avg_rating": 0.0}, "아쉬가르 파라디": {"name": "아쉬가르 파라디", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "씨민과 나데르의 별거", "director": "아쉬가르 파라디", "platforms": [], "raw": "씨민과 나데르의 별거"}], "avg_rating": 0.0}, "지아장커": {"name": "지아장커", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "스틸 라이프", "director": "지아장커", "platforms": [], "raw": "스틸 라이프"}], "avg_rating": 0.0}, "루크레시아 마르텔": {"name": "루크레시아 마르텔", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "자마", "director": "루크레시아 마르텔", "platforms": [], "raw": "자마"}], "avg_rating": 0.0}, "셀린 시아마": {"name": "셀린 시아마", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "타오르는 여인의 초상", "director": "셀린 시아마", "platforms": [], "raw": "타오르는 여인의 초상"}], "avg_rating": 0.0}, "스티븐 스필버그": {"name": "스티븐 스필버그", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "파벨만스", "director": "스티븐 스필버그", "platforms": ["넷플", "티빙", "왓챠"], "raw": "파벨만스(넷플,티빙,왓챠)"}], "avg_rating": 0.0}, "아피찻퐁 위라세타꾼": {"name": "아피찻퐁 위라세타꾼", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "열대병", "director": "아피찻퐁 위라세타꾼", "platforms": [], "raw": "열대병"}, {"title": "엉클 분미", "director": "아피찻퐁 위라세타꾼", "platforms": [], "raw": "엉클 분미"}], "avg_rating": 0.0}, "리처드 링클레이터": {"name": "리처드 링클레이터", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "보이후드", "director": "리처드 링클레이터", "platforms": ["왓챠"], "raw": "보이후드(왓챠)"}], "avg_rating": 0.0}, "고전": {"name": "고전", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "안드레이 타르코프스키", "director": "고전", "platforms": [], "raw": "안드레이 타르코프스키"}, {"title": "루이스 부뉴엘", "director": "고전", "platforms": [], "raw": "루이스 부뉴엘"}, {"title": "잉마르 베리만", "director": "고전", "platforms": [], "raw": "잉마르 베리만"}], "avg_rating": 0.0}, "극단적 예술영화": {"name": "극단적 예술영화", "watched_count": 0, "ratings": [], "watched_movies": [], "watchlist_movies": [{"title": "벨라 타르)", "director": "극단적 예술영화", "platforms": ["사탄탱고(7시간"], "raw": "벨라 타르(사탄탱고(7시간))"}, {"title": "알레한드로 조도로프스키", "director": "극단적 예술영화", "platforms": [], "raw": "알레한드로 조도로프스키"}], "avg_rating": 0.0}}};
+    let selectedRatingFilter = null;
+    let selectedOtt = 'ALL';
+
+    // Environment & Read-Only Guest Mode Detection
+    const isLocalServer = (window.location.port === '8088') || (window.location.hostname === 'localhost') || (window.location.hostname === '100.77.88.46');
+    const urlParams = new URLSearchParams(window.location.search);
+    const IS_READONLY = urlParams.get('mode') === 'read' || !isLocalServer;
+
+    const PHILOSOPHY_MAP = RAW_DATA.rating_system || {
+      "5.0": "올타임 GOAT, 살면서 꼭 봐야된다고 생각하는 영화 or 내 취향이 아주 강하게 반영된 경우",
+      "5": "올타임 GOAT, 살면서 꼭 봐야된다고 생각하는 영화 or 내 취향이 아주 강하게 반영된 경우",
+      "4.5": "명작, 보고나면 많은 것들을 배우거나 느낄 수 있는 영화",
+      "4.0": "강렬한 인상을 남기는 영화, 취향과 상황에 따라 충분히 명작이라 불릴 수 있는 영화",
+      "4": "강렬한 인상을 남기는 영화, 취향과 상황에 따라 충분히 명작이라 불릴 수 있는 영화",
+      "3.5": "수작. 메시지나 형식, 혹은 순수한 재미 중 하나 이상이 확실한 영화",
+      "3.0": "극장에서의 시간을 온전히 즐기고 나올 수 있는 영화. 여기서부터 추천",
+      "3": "극장에서의 시간을 온전히 즐기고 나올 수 있는 영화. 여기서부터 추천",
+      "2.5": "누구랑 같이봤을때 나쁘진 않은 정도, 혼자서는 굳이",
+      "2.0": "오로지 시간 때우기가 목적이라면 봐도 되는 영화",
+      "2": "오로지 시간 때우기가 목적이라면 봐도 되는 영화",
+      "1.5": "돈을 주고 봐라해도 시간이 아까운 영화",
+      "1.0": "졸작. 감독이나 배우에게 기부하고 싶은게 아니라면 굳이?",
+      "1": "졸작. 감독이나 배우에게 기부하고 싶은게 아니라면 굳이?",
+      "0.5": "사회에 해로운 메시지, 존재 의미를 인정할 수 없는 영화"
+    };
+
+    function getPhilosophy(r) {
+      if (r === null || r === undefined) return "";
+      const num = parseFloat(r);
+      const fixed = num.toFixed(1);
+      const str = num.toString();
+      return PHILOSOPHY_MAP[fixed] || PHILOSOPHY_MAP[str] || PHILOSOPHY_MAP[r] || "기준 미등록";
+    }
+
+    function renderRatingPills() {
+      const container = document.getElementById('ratingPillContainer');
+      container.innerHTML = '';
+      const ratings = [5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0];
+
+      ratings.forEach(r => {
+        const count = RAW_DATA.movies.filter(m => m.rating === r).length;
+        const btn = document.createElement('button');
+        const isActive = selectedRatingFilter === r;
+        btn.className = `rating-pill px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border text-2xs sm:text-xs transition flex items-center space-x-1 ${
+          isActive ? 'active bg-cinema-gold text-black border-cinema-gold font-bold shadow-md shadow-cinema-gold/20' 
+                   : 'bg-cinema-black/60 border-cinema-border text-gray-300 hover:border-cinema-gold/50'
+        }`;
+        btn.innerHTML = `<span>★ ${r.toFixed(1)}</span><span class="opacity-70 text-2xs">(${count})</span>`;
+        btn.onclick = () => filterByRating(r);
+        container.appendChild(btn);
+      });
+
+      // Quick Filter for Movies without Director
+      const noDirCount = RAW_DATA.movies.filter(m => !m.director).length;
+      const noDirBtn = document.createElement('button');
+      const isNoDirActive = selectedRatingFilter === 'NO_DIRECTOR';
+      noDirBtn.className = `px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border text-2xs sm:text-xs font-semibold transition flex items-center space-x-1.5 ${
+        isNoDirActive ? 'bg-amber-400 text-black border-amber-400 font-bold shadow-md shadow-amber-400/30 scale-105 active-gold-pulse' 
+                      : 'bg-amber-400/10 border-amber-400/30 text-amber-300 hover:bg-amber-400/20'
+      }`;
+      noDirBtn.innerHTML = `<i class="fa-solid fa-user-pen"></i><span>감독 미등록</span><span class="opacity-75 text-2xs">(${noDirCount})</span>`;
+      noDirBtn.onclick = () => filterByRating('NO_DIRECTOR');
+      container.appendChild(noDirBtn);
+    }
+
+    function updateRatingSpotlight(r) {
+      const spotlight = document.getElementById('selectedRatingSpotlight');
+      const badge = document.getElementById('spotlightStarBadge');
+      const countBadge = document.getElementById('spotlightCountBadge');
+      const desc = document.getElementById('spotlightDesc');
+      const clearBtn = document.getElementById('btnClearFilter');
+
+      if (spotlight) {
+        spotlight.classList.remove('active-gold-pulse');
+        void spotlight.offsetWidth;
+      }
+
+      if (r === 'NO_DIRECTOR') {
+        const count = RAW_DATA.movies.filter(m => !m.director).length;
+        badge.className = "px-2.5 py-0.5 rounded bg-amber-400 text-black font-bold font-cinzel text-xs";
+        badge.innerText = "감독 미등록 영화";
+        countBadge.innerText = `${count}편`;
+        desc.innerText = "감독 정보가 등록되지 않은 본 영화 목록입니다. 각 영화 카드의 [+ 감독 등록] 버튼을 눌러 감독명을 입력하면 옵시디언 볼트에 즉시 동기화됩니다.";
+        clearBtn.classList.remove('hidden');
+        if (spotlight) spotlight.classList.add('active-gold-pulse');
+      } else if (r !== null) {
+        badge.className = "px-2.5 py-0.5 rounded bg-cinema-gold text-black font-bold font-cinzel text-xs";
+        const count = RAW_DATA.movies.filter(m => m.rating === r).length;
+        badge.innerText = `★ ${r.toFixed(1)} 기준`;
+        countBadge.innerText = `${count}편 감상됨`;
+        desc.innerText = `"${getPhilosophy(r)}"`;
+        clearBtn.classList.remove('hidden');
+        if (spotlight) spotlight.classList.add('active-gold-pulse');
+      } else {
+        badge.className = "px-2.5 py-0.5 rounded bg-cinema-gold text-black font-bold font-cinzel text-xs";
+        badge.innerText = "전체 평점 분포";
+        countBadge.innerText = `총 ${RAW_DATA.total_count}편`;
+        desc.innerText = "원하는 별점을 터치하여 해당 평점에 대한 나만의 기준과 영화들을 확인하세요.";
+        clearBtn.classList.add('hidden');
+      }
+    }
+
+    let ratingChartInst = null;
+    function renderRatingChart() {
+      const ctx = document.getElementById('ratingChart').getContext('2d');
+      const ratings = [5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0];
+      const counts = ratings.map(r => RAW_DATA.movies.filter(m => m.rating === r).length);
+
+      if (ratingChartInst) ratingChartInst.destroy();
+
+      ratingChartInst = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ratings.map(r => `★ ${r.toFixed(1)}`),
+          datasets: [{
+            data: counts,
+            backgroundColor: ratings.map(r => {
+              if (selectedRatingFilter !== null) {
+                return r === selectedRatingFilter ? '#f3c368' : 'rgba(35, 41, 54, 0.45)';
+              }
+              return r >= 4.5 ? 'rgba(229, 169, 60, 0.95)' : r >= 3.5 ? 'rgba(243, 195, 104, 0.8)' : 'rgba(75, 85, 99, 0.6)';
+            }),
+            borderColor: ratings.map(r => (r === selectedRatingFilter ? '#ffd700' : 'transparent')),
+            borderWidth: 1.5,
+            borderRadius: 8,
+            hoverBackgroundColor: '#ffd700'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 650,
+            easing: 'easeOutQuart'
+          },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(15, 17, 23, 0.95)',
+              titleColor: '#e5a93c',
+              borderColor: 'rgba(229, 169, 60, 0.3)',
+              borderWidth: 1,
+              padding: 10,
+              callbacks: {
+                afterLabel: function(ctx) {
+                  const r = ratings[ctx.dataIndex];
+                  return `기준: ${getPhilosophy(r)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#8b949e', font: { size: 10 } } },
+            y: { grid: { color: 'rgba(31, 36, 48, 0.6)' }, ticks: { color: '#8b949e', font: { size: 10 } } }
+          },
+          onClick: (evt, elements) => {
+            if (elements.length > 0) {
+              const idx = elements[0].index;
+              filterByRating(ratings[idx]);
+            }
+          }
+        }
+      });
+    }
+
+    function filterByRating(r) {
+      selectedRatingFilter = (selectedRatingFilter === r) ? null : r;
+      renderRatingPills();
+      updateRatingSpotlight(selectedRatingFilter);
+      renderRatingChart();
+      filterReviews();
+      if (selectedRatingFilter) {
+        showToast(`★ ${r.toFixed(1)} 등급 필터 적용`);
+      }
+    }
+
+    function clearRatingFilter() {
+      selectedRatingFilter = null;
+      renderRatingPills();
+      updateRatingSpotlight(null);
+      renderRatingChart();
+      filterReviews();
+      showToast('필터 초기화됨');
+    }
+
+    // Director Deep Dive
+    let currentDirectorSort = 'avg';
+    let selectedDirector = null;
+
+    function renderDirectorSection() {
+      const chips = document.getElementById('directorChips');
+      chips.innerHTML = '';
+      const stats = Object.values(RAW_DATA.director_stats);
+
+      let list = stats.filter(d => d.watched_count >= 1 || d.watchlist_movies.length >= 1);
+
+      if (currentDirectorSort === 'avg') {
+        list.sort((a, b) => (b.avg_rating - a.avg_rating) || (b.watched_count - a.watched_count));
+      } else {
+        list.sort((a, b) => (b.watched_count - a.watched_count) || (b.avg_rating - a.avg_rating));
+      }
+
+      list.slice(0, 18).forEach((d) => {
+        const btn = document.createElement('button');
+        const isSel = selectedDirector === d.name;
+        btn.className = `px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-2xs sm:text-xs font-semibold transition-all duration-200 border flex items-center space-x-1.5 active:scale-95 ${
+          isSel ? 'bg-cinema-gold text-black border-cinema-gold shadow-md shadow-cinema-gold/30 scale-105 font-bold' 
+                : 'bg-cinema-card border-cinema-border text-gray-300 hover:border-cinema-gold/50'
+        }`;
+        btn.innerHTML = `
+          <span>${d.name}</span>
+          <span class="text-2xs opacity-75">(${d.watched_count}편${d.avg_rating ? ` · ★${d.avg_rating}` : ''})</span>
+        `;
+        btn.onclick = () => selectDirector(d.name);
+        chips.appendChild(btn);
+      });
+
+      if (!selectedDirector && list.length > 0) {
+        selectDirector(list[0].name);
+      }
+    }
+
+    function selectDirector(name) {
+      selectedDirector = name;
+      renderDirectorSection();
+      const d = RAW_DATA.director_stats[name];
+      if (!d) return;
+
+      const detailBox = document.getElementById('directorDetailBox');
+      if (detailBox) {
+        detailBox.classList.remove('card-enter');
+        void detailBox.offsetWidth;
+        detailBox.classList.add('card-enter');
+      }
+
+      document.getElementById('selectedDirectorName').innerText = d.name;
+      document.getElementById('selectedDirectorMeta').innerText = `관람 ${d.watched_count}편 · 평균 ★ ${d.avg_rating || '-'} · 볼 예정작 ${d.watchlist_movies.length}편`;
+
+      const watchedContainer = document.getElementById('dirWatchedList');
+      watchedContainer.innerHTML = '';
+      if (d.watched_movies.length === 0) {
+        watchedContainer.innerHTML = '<div class="text-cinema-muted py-2">관람 기록 없음</div>';
+      } else {
+        d.watched_movies.sort((a, b) => b.rating - a.rating).forEach(m => {
+          const row = document.createElement('div');
+          row.className = "flex items-center justify-between p-2 rounded bg-cinema-card border border-cinema-border/50";
+          row.innerHTML = `
+            <div class="pr-2 truncate">
+              <span class="font-semibold text-gray-200">${m.title}</span>
+              <span class="text-cinema-muted text-2xs ml-1">(${m.year || ''})</span>
+              ${m.comment ? `<div class="text-2xs text-gray-400 font-serifKr italic mt-0.5 truncate">"${m.comment}"</div>` : ''}
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-cinema-gold font-bold font-cinzel whitespace-nowrap">★ ${m.rating.toFixed(1)}</span>
+              ${!IS_READONLY ? (!m.comment ? `
+                <button onclick="openCommentModal('${m.title}', '${m.year}', '${d.name}', ${m.rating}, '')" class="px-1.5 py-0.5 rounded bg-cinema-gold/10 hover:bg-cinema-gold text-cinema-gold hover:text-black border border-cinema-gold/30 text-3xs font-semibold whitespace-nowrap">
+                  + 한줄평
+                </button>
+              ` : `
+                <button onclick="openCommentModal('${m.title}', '${m.year}', '${d.name}', ${m.rating}, '${m.comment.replace(/'/g, "\'")}')" class="text-cinema-muted hover:text-cinema-gold text-3xs">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+              `) : ''}
+            </div>
+          `;
+          watchedContainer.appendChild(row);
+        });
+      }
+
+      const watchContainer = document.getElementById('dirWatchlist');
+      watchContainer.innerHTML = '';
+      if (d.watchlist_movies.length === 0) {
+        watchContainer.innerHTML = '<div class="text-cinema-muted py-2">등록된 예정작 없음 (모두 감상 완료!)</div>';
+      } else {
+        d.watchlist_movies.forEach(w => {
+          const row = document.createElement('div');
+          row.className = "flex items-center justify-between p-2 rounded bg-cinema-card border border-cinema-border/50";
+          row.innerHTML = `
+            <div class="pr-2">
+              <span class="font-semibold text-gray-200">${w.title}</span>
+              <div class="flex items-center gap-1 mt-1">
+                ${w.platforms.map(p => `<span class="px-1.5 py-0.2 rounded text-2xs bg-cinema-border text-cinema-gold">${p}</span>`).join('')}
+              </div>
+            </div>
+            <button onclick="openCheckWatchlistModal('${w.title}', '${d.name}')" class="px-2 py-1 rounded bg-cinema-gold/10 hover:bg-cinema-gold text-cinema-gold hover:text-black border border-cinema-gold/30 text-2xs transition font-semibold whitespace-nowrap">
+              ✓ 봤어요
+            </button>
+          `;
+          watchContainer.appendChild(row);
+        });
+      }
+    }
+
+    function sortDirectors(mode) {
+      currentDirectorSort = mode;
+      document.getElementById('btnSortAvg').className = mode === 'avg' ? 'px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs' : 'px-3 py-1.5 rounded-lg bg-cinema-border text-gray-300 transition text-2xs sm:text-xs';
+      document.getElementById('btnSortCount').className = mode === 'count' ? 'px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs' : 'px-3 py-1.5 rounded-lg bg-cinema-border text-gray-300 transition text-2xs sm:text-xs';
+      renderDirectorSection();
+    }
+
+    // Review & Quotes Grid
+    function filterReviews() {
+      const query = document.getElementById('reviewSearchInput').value.toLowerCase().trim();
+      const container = document.getElementById('reviewsGrid');
+      const badge = document.getElementById('reviewsCountBadge');
+      container.innerHTML = '';
+
+      let list = RAW_DATA.movies;
+
+      if (selectedRatingFilter === 'NO_DIRECTOR') {
+        list = list.filter(m => !m.director);
+      } else if (selectedRatingFilter !== null) {
+        list = list.filter(m => m.rating === selectedRatingFilter);
+      } else if (!query) {
+        // By default show movies that have reviews or high ratings
+        list = list.filter(m => m.comment);
+      }
+
+      if (query) {
+        list = list.filter(m => 
+          m.title.toLowerCase().includes(query) ||
+          (m.director && m.director.toLowerCase().includes(query)) ||
+          (m.comment && m.comment.toLowerCase().includes(query))
+        );
+      }
+
+      badge.innerText = `${list.length}편`;
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center py-8 text-cinema-muted text-xs">일치하는 영화/리뷰가 없습니다.</div>';
+        return;
+      }
+
+      list.forEach((m, idx) => {
+        const card = document.createElement('div');
+        card.className = "glass-card interactive-card card-enter rounded-xl p-4 flex flex-col justify-between";
+        card.style.animationDelay = `${Math.min(idx * 0.025, 0.3)}s`;
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-cinema-gold font-bold font-cinzel text-sm">★ ${m.rating.toFixed(1)}</span>
+              <span class="text-cinema-muted text-2xs">${m.year || ''}</span>
+            </div>
+            <h4 class="font-bold text-sm text-gray-100 mb-1 truncate" title="${m.title}">${m.title}</h4>
+            ${m.director ? `
+              <div class="text-2xs text-cinema-muted mb-2 flex items-center justify-between">
+                <span><i class="fa-solid fa-user-tie mr-1 text-cinema-gold/70"></i>${m.director}</span>
+              </div>
+            ` : (IS_READONLY ? `
+              <div class="text-2xs text-cinema-muted/60 mb-2 italic">감독 정보 미상</div>
+            ` : `
+              <div class="mb-2">
+                <button onclick="openCommentModal('${m.title}', '${m.year}', '', ${m.rating}, '${(m.comment||'').replace(/'/g, "\'")}', 'director')" class="text-2xs text-amber-400 hover:text-amber-300 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 px-2 py-0.5 rounded flex items-center space-x-1 transition active:scale-95">
+                  <i class="fa-solid fa-plus text-3xs"></i>
+                  <span>감독 정보 등록</span>
+                </button>
+              </div>
+            `)}
+            ${m.comment ? `
+              <div class="bg-cinema-black/60 rounded-lg p-2.5 border border-cinema-border/50 text-xs text-gray-300 font-serifKr italic leading-relaxed">
+                "${m.comment}"
+              </div>
+            ` : `
+              <div class="py-1.5 text-2xs text-cinema-muted italic">한줄평 미등록</div>
+            `}
+          </div>
+          <div class="mt-3 pt-2 border-t border-cinema-border/30 flex items-center justify-between text-2xs">
+            <span class="text-cinema-muted">${m.comment ? '리뷰 노트 보관됨' : (!m.director ? '감독/리뷰 미등록' : '평점 기록됨')}</span>
+            ${!IS_READONLY ? `
+              <button onclick="openCommentModal('${m.title}', '${m.year}', '${(m.director||'').replace(/'/g, "\'")}', ${m.rating}, '${(m.comment||'').replace(/'/g, "\'")}')" class="text-cinema-gold hover:underline flex items-center space-x-1 active:scale-95 transition">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>${!m.director ? '감독/한줄평 입력' : '정보/한줄평 수정'}</span>
+              </button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Watchlist Grid & OTT Filter
+    function filterWatchlistByOtt(ott) {
+      selectedOtt = ott;
+      document.querySelectorAll('#ottFilterBadges .ott-btn').forEach(btn => {
+        if (btn.innerText.includes(ott) || (ott === 'ALL' && btn.innerText === '전체')) {
+          btn.className = 'ott-btn active px-2.5 py-1 rounded bg-cinema-gold text-black font-semibold';
+        } else {
+          btn.className = 'ott-btn px-2.5 py-1 rounded bg-cinema-border hover:bg-gray-800 text-gray-300';
+        }
+      });
+      renderWatchlist();
+    }
+
+    function renderWatchlist() {
+      const container = document.getElementById('watchlistGrid');
+      container.innerHTML = '';
+      let list = RAW_DATA.watchlist;
+
+      if (selectedOtt !== 'ALL') {
+        list = list.filter(w => w.platforms.some(p => p.includes(selectedOtt)));
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center py-8 text-cinema-muted text-xs">남은 예정작이 없습니다!</div>';
+        return;
+      }
+
+      list.forEach((w, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-cinema-card interactive-card card-enter rounded-lg p-3 border border-cinema-border/70 flex flex-col justify-between";
+        card.style.animationDelay = `${Math.min(idx * 0.025, 0.3)}s`;
+        card.innerHTML = `
+          <div>
+            <div class="font-bold text-xs text-gray-200 mb-0.5 truncate" title="${w.title}">${w.title}</div>
+            <div class="text-2xs text-cinema-muted mb-2 truncate">${w.director}</div>
+            <div class="flex flex-wrap gap-1 mb-3">
+              ${w.platforms.map(p => `<span class="px-1.5 py-0.2 rounded text-2xs bg-cinema-black text-cinema-gold border border-cinema-border/40 font-mono">${p}</span>`).join('')}
+            </div>
+          </div>
+          ${!IS_READONLY ? `
+            <button onclick="openCheckWatchlistModal('${w.title}', '${w.director}')" class="shimmer-btn w-full py-1.5 rounded bg-cinema-border hover:bg-cinema-gold hover:text-black text-gray-300 text-2xs font-semibold transition flex items-center justify-center space-x-1 active:scale-95">
+              <i class="fa-solid fa-check"></i>
+              <span>본 영화로 등록</span>
+            </button>
+          ` : `
+            <div class="py-1 text-center text-3xs text-cinema-muted border-t border-cinema-border/30 mt-2 font-mono">감상 예정작</div>
+          `}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setRating(val) {
+      val = parseFloat(val);
+      if (isNaN(val)) val = 4.0;
+      val = Math.max(0.5, Math.min(5.0, Math.round(val * 2) / 2));
+      const input = document.getElementById('modalInputRating');
+      if (input) input.value = val.toFixed(1);
+      const slider = document.getElementById('modalRatingSlider');
+      if (slider) slider.value = val.toFixed(1);
+      syncStarFromInput();
+    }
+
+    function openModalWithAnimation() {
+      const modal = document.getElementById('recordModal');
+      modal.classList.remove('hidden');
+      const dialog = modal.querySelector('.bg-cinema-card');
+      if (dialog) {
+        dialog.classList.remove('modal-dialog-enter');
+        void dialog.offsetWidth;
+        dialog.classList.add('modal-dialog-enter');
+      }
+    }
+
+    // Modal & 2-Way Sync
+    function openAddModal() {
+      document.getElementById('modalTitleText').innerText = "새 영화 관람 기록";
+      document.getElementById('modalIsFromWatchlist').value = "false";
+      document.getElementById('modalInputTitle').value = "";
+      document.getElementById('modalInputYear').value = "";
+      document.getElementById('modalInputDirector').value = "";
+      setRating(4.0);
+      document.getElementById('modalInputComment').value = "";
+      openModalWithAnimation();
+    }
+
+    function openCheckWatchlistModal(title, director) {
+      document.getElementById('modalTitleText').innerText = `관람 완료 등록: ${title}`;
+      document.getElementById('modalIsFromWatchlist').value = "true";
+      document.getElementById('modalInputTitle').value = title;
+      document.getElementById('modalInputYear').value = new Date().getFullYear();
+      document.getElementById('modalInputDirector').value = director;
+      setRating(4.5);
+      document.getElementById('modalInputComment').value = "";
+      openModalWithAnimation();
+    }
+
+    // Open Modal Specifically for adding/editing a comment or director on an existing movie
+    function openCommentModal(title, year, director, rating, existingComment, focusField) {
+      const hasDirector = !!(director && director.trim());
+      document.getElementById('modalTitleText').innerText = hasDirector ? `영화 정보 / 한줄평 수정: ${title}` : `감독 정보 및 한줄평 등록: ${title}`;
+      document.getElementById('modalIsFromWatchlist').value = "false";
+      document.getElementById('modalInputTitle').value = title;
+      document.getElementById('modalInputYear').value = year || "";
+      document.getElementById('modalInputDirector').value = director || "";
+      setRating(rating !== undefined && rating !== null ? parseFloat(rating) : 4.0);
+      document.getElementById('modalInputComment').value = existingComment || "";
+      openModalWithAnimation();
+
+      setTimeout(() => {
+        if (focusField === 'director' || !hasDirector) {
+          const dirInput = document.getElementById('modalInputDirector');
+          if (dirInput) { dirInput.focus(); dirInput.select(); }
+        } else {
+          const commentInput = document.getElementById('modalInputComment');
+          if (commentInput) { commentInput.focus(); }
+        }
+      }, 150);
+    }
+
+    function closeAddModal() {
+      document.getElementById('recordModal').classList.add('hidden');
+    }
+
+    function syncStarFromInput() {
+      const input = document.getElementById('modalInputRating');
+      let val = parseFloat(input.value);
+      if (isNaN(val)) val = 4.0;
+      val = Math.max(0.5, Math.min(5.0, Math.round(val * 2) / 2));
+      input.value = val.toFixed(1);
+
+      const slider = document.getElementById('modalRatingSlider');
+      if (slider && parseFloat(slider.value) !== val) {
+        slider.value = val.toFixed(1);
+      }
+
+      const descBox = document.getElementById('modalRatingDesc');
+      if (descBox) {
+        descBox.innerText = `"${getPhilosophy(val)}"`;
+      }
+
+      // Render 5 stars with left (half) and right (full) touch/click target zones
+      const starContainer = document.getElementById('starSelector');
+      if (starContainer) {
+        starContainer.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+          const starWrap = document.createElement('div');
+          starWrap.className = "relative inline-flex items-center justify-center cursor-pointer p-1 text-2xl select-none";
+          
+          let iconClass = "fa-regular fa-star text-gray-600";
+          if (val >= i) {
+            iconClass = "fa-solid fa-star text-cinema-gold drop-shadow-[0_0_8px_rgba(230,175,46,0.5)]";
+          } else if (val >= i - 0.5) {
+            iconClass = "fa-solid fa-star-half-stroke text-cinema-gold drop-shadow-[0_0_8px_rgba(230,175,46,0.5)]";
+          }
+
+          starWrap.innerHTML = `
+            <i class="${iconClass} pointer-events-none"></i>
+            <span class="absolute left-0 top-0 w-1/2 h-full z-10" title="${(i - 0.5).toFixed(1)}" onclick="setRating(${i - 0.5})"></span>
+            <span class="absolute right-0 top-0 w-1/2 h-full z-10" title="${i.toFixed(1)}" onclick="setRating(${i})"></span>
+          `;
+          starContainer.appendChild(starWrap);
+        }
+      }
+
+      // Render 0.5 to 5.0 quick pill chips (10 buttons)
+      const chipContainer = document.getElementById('modalRatingChips');
+      if (chipContainer) {
+        chipContainer.innerHTML = '';
+        const allRatings = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0];
+        allRatings.forEach(r => {
+          const isSelected = Math.abs(val - r) < 0.01;
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = `px-2 py-1 rounded text-2xs sm:text-xs font-bold transition border ${
+            isSelected ? 'bg-cinema-gold text-black border-cinema-gold shadow-md shadow-cinema-gold/30 scale-105' 
+                       : 'bg-cinema-card/80 border-cinema-border text-gray-400 hover:text-white hover:border-cinema-gold/50'
+          }`;
+          chip.innerText = `${r.toFixed(1)}`;
+          chip.onclick = () => setRating(r);
+          chipContainer.appendChild(chip);
+        });
+      }
+    }
+
+    async function submitMovieRecord(e) {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('modalInputTitle').value.trim(),
+        year: document.getElementById('modalInputYear').value.trim(),
+        director: document.getElementById('modalInputDirector').value.trim(),
+        rating: parseFloat(document.getElementById('modalInputRating').value),
+        comment: document.getElementById('modalInputComment').value.trim(),
+        is_from_watchlist: document.getElementById('modalIsFromWatchlist').value === "true"
+      };
+
+      const btn = document.getElementById('modalSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+
+      try {
+        const res = await fetch('/api/movie/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          showToast(`'${payload.title}' 옵시디언 볼트에 기록 완료!`);
+          closeAddModal();
+          const dataRes = await fetch('/api/data');
+          if (dataRes.ok) {
+            const freshData = await dataRes.json();
+            Object.assign(RAW_DATA, freshData);
+            initApp();
+          }
+        } else {
+          throw new Error('API Error');
+        }
+      } catch (err) {
+        showToast("⚠️ 로컬 서버(movie_server.py)가 미가동 상태입니다.");
+        alert("로컬 수정 기능을 사용하려면 터미널에서 다음 명령을 실행해 주세요:\npython3 ~/scripts/movie_server.py --serve");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> 옵시디언 볼트에 기록 저장';
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        t.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function animateCounter(id, end, duration) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const startTime = performance.now();
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 4);
+        el.innerText = Math.floor(ease * end);
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = end;
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    function initApp() {
+      if (IS_READONLY) {
+        const fab = document.getElementById('fabContainer');
+        if (fab) fab.style.display = 'none';
+        const badge = document.getElementById('readonlyHeaderBadge');
+        if (badge) badge.classList.remove('hidden');
+        const modal = document.getElementById('recordModal');
+        if (modal) modal.remove();
+      }
+      animateCounter('statTotal', RAW_DATA.total_count, 900);
+      animateCounter('statReviews', RAW_DATA.review_count, 900);
+      animateCounter('statWatchlist', RAW_DATA.watchlist_count, 900);
+      renderRatingPills();
+      updateRatingSpotlight(selectedRatingFilter);
+      renderRatingChart();
+      renderDirectorSection();
+      filterReviews();
+      renderWatchlist();
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
