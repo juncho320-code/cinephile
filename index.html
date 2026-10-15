@@ -27,19 +27,71 @@
           fontFamily: {
             cinzel: ['Cinzel', 'serif'],
             serifKr: ['Noto Serif KR', 'serif'],
-            sans: ['Inter', 'sans-serif']
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"SF Pro Display"', 'Inter', 'sans-serif']
           }
         }
       }
     }
   </script>
   <style>
+    :root {
+      /* Apple Liquid Glass Material Tokens */
+      --apple-glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.015) 100%);
+      --apple-glass-card-bg: rgba(15, 17, 23, 0.68);
+      --apple-glass-blur: blur(28px) saturate(190%) contrast(105%);
+      --apple-glass-border: 1px solid rgba(255, 255, 255, 0.12);
+      --apple-glass-shadow: 
+        0 1px 0 0 rgba(255, 255, 255, 0.18) inset,
+        0 -1px 0 0 rgba(0, 0, 0, 0.25) inset,
+        0 14px 34px -4px rgba(0, 0, 0, 0.55),
+        0 4px 12px -2px rgba(0, 0, 0, 0.35);
+    }
+
     body {
       background-color: #07080a;
       color: #e6edf3;
-      font-family: 'Inter', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", sans-serif;
+      letter-spacing: -0.015em;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
+    }
+
+    /* Apple Glass Header */
+    .apple-glass-header {
+      background: rgba(7, 8, 10, 0.75);
+      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+      backdrop-filter: var(--apple-glass-blur);
+      -webkit-backdrop-filter: var(--apple-glass-blur);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1) inset, 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Apple Glass Modal Container */
+    .modal-glass-container {
+      background: rgba(13, 15, 20, 0.82) !important;
+      background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+      backdrop-filter: blur(32px) saturate(200%) contrast(108%) !important;
+      -webkit-backdrop-filter: blur(32px) saturate(200%) contrast(108%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      box-shadow: 
+        0 1px 0 0 rgba(255, 255, 255, 0.28) inset,
+        0 -1px 0 0 rgba(0, 0, 0, 0.3) inset,
+        0 24px 50px -10px rgba(0, 0, 0, 0.75) !important;
+    }
+
+    /* Apple Glass Pill & Controls */
+    .apple-glass-pill {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.18) inset;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .apple-glass-pill:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.28);
+      box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.28) inset;
     }
 
     /* 35mm Analog Film Grain Texture Overlay */
@@ -93,10 +145,12 @@
     }
 
     .glass-card {
-      background: rgba(15, 17, 23, 0.84);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--apple-glass-card-bg);
+      background-image: var(--apple-glass-bg);
+      backdrop-filter: var(--apple-glass-blur);
+      -webkit-backdrop-filter: var(--apple-glass-blur);
+      border: var(--apple-glass-border);
+      box-shadow: var(--apple-glass-shadow);
       position: relative;
     }
 
@@ -210,7 +264,7 @@
   <div class="cinema-ambient-spotlight spotlight-2"></div>
 
   <!-- TOP HEADER -->
-  <header class="sticky top-0 z-40 bg-cinema-black/95 backdrop-blur-md border-b border-cinema-border px-4 sm:px-6 py-3.5">
+  <header class="sticky top-0 z-40 apple-glass-header px-4 sm:px-6 py-3.5">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       <div class="flex items-center space-x-2.5">
         <div class="w-9 h-9 rounded-lg bg-cinema-gold/10 border border-cinema-gold/30 flex items-center justify-center text-cinema-gold text-lg">
@@ -547,7 +601,7 @@
 
   <!-- FLOATING ACTION BUTTON (FAB) -->
   <aside id="fabContainer" class="fixed bottom-6 right-5 sm:right-8 z-40 flex flex-col space-y-2">
-    <button onclick="openWatchlistModal()" aria-label="새 볼 예정작 추가" class="flex items-center space-x-1.5 bg-cinema-card border border-cinema-gold/40 text-cinema-gold font-bold px-3.5 py-2.5 rounded-full shadow-xl hover:bg-cinema-gold/10 active:scale-95 transition text-xs">
+    <button onclick="openWatchlistModal()" aria-label="새 볼 예정작 추가" class="flex items-center space-x-1.5 apple-glass-pill text-cinema-gold font-bold px-3.5 py-2.5 rounded-full shadow-xl hover:bg-cinema-gold/15 active:scale-95 transition text-xs">
       <i class="fa-solid fa-bookmark text-xs"></i>
       <span class="hidden sm:inline">예정작 추가</span>
     </button>
@@ -560,7 +614,7 @@
 
   <!-- MODAL 1: QUICK ADD / RECORD / EDIT COMMENT (본 영화) -->
   <div id="recordModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
-    <div class="bg-cinema-card border border-cinema-border w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl relative modal-dialog-enter">
+    <div class="modal-glass-container bg-cinema-card border border-cinema-border w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl relative modal-dialog-enter">
       <button onclick="closeAddModal()" class="absolute right-4 top-4 text-cinema-muted hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -660,7 +714,7 @@
 
   <!-- MODAL 2: ADD TO WATCHLIST (볼 예정작 등록) -->
   <div id="watchlistAddModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
-    <div class="bg-cinema-card border border-cinema-border w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl relative modal-dialog-enter">
+    <div class="modal-glass-container bg-cinema-card border border-cinema-border w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl relative modal-dialog-enter">
       <button onclick="closeWatchlistModal()" class="absolute right-4 top-4 text-cinema-muted hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
