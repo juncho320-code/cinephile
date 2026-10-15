@@ -242,18 +242,16 @@
           </div>
         </div>
 
-        ${!IS_READONLY ? `
-          <div class="hidden md:flex items-center space-x-2 pl-3 border-l border-cinema-border">
-            <button onclick="openAddModal()" class="px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-bold text-xs hover:bg-cinema-goldLight transition flex items-center space-x-1 shadow-md shadow-cinema-gold/20 active:scale-95">
-              <i class="fa-solid fa-plus text-3xs"></i>
-              <span>본 영화 기록</span>
-            </button>
-            <button onclick="openWatchlistModal()" class="px-3 py-1.5 rounded-lg bg-cinema-card border border-cinema-border hover:border-cinema-gold text-gray-200 text-xs font-semibold transition flex items-center space-x-1 active:scale-95">
-              <i class="fa-solid fa-bookmark text-3xs text-cinema-gold"></i>
-              <span>볼 예정작 추가</span>
-            </button>
-          </div>
-        ` : ''}
+        <div id="headerActionButtons" class="hidden md:flex items-center space-x-2 pl-3 border-l border-cinema-border">
+          <button onclick="openAddModal()" class="px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-bold text-xs hover:bg-cinema-goldLight transition flex items-center space-x-1 shadow-md shadow-cinema-gold/20 active:scale-95">
+            <i class="fa-solid fa-plus text-3xs"></i>
+            <span>본 영화 기록</span>
+          </button>
+          <button onclick="openWatchlistModal()" class="px-3 py-1.5 rounded-lg bg-cinema-card border border-cinema-border hover:border-cinema-gold text-gray-200 text-xs font-semibold transition flex items-center space-x-1 active:scale-95">
+            <i class="fa-solid fa-bookmark text-3xs text-cinema-gold"></i>
+            <span>볼 예정작 추가</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -516,12 +514,10 @@
         </div>
 
         <div class="flex items-center flex-wrap gap-2" onclick="event.stopPropagation()">
-          ${!IS_READONLY ? `
-            <button onclick="openWatchlistModal()" class="shimmer-btn px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-bold text-2xs sm:text-xs transition shadow-md shadow-cinema-gold/20 flex items-center space-x-1.5 active:scale-95">
-              <i class="fa-solid fa-plus text-3xs"></i>
-              <span>볼 예정작 등록</span>
-            </button>
-          ` : ''}
+          <button id="watchlistHeaderAddBtn" onclick="openWatchlistModal()" class="shimmer-btn px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-bold text-2xs sm:text-xs transition shadow-md shadow-cinema-gold/20 flex items-center space-x-1.5 active:scale-95">
+            <i class="fa-solid fa-plus text-3xs"></i>
+            <span>볼 예정작 등록</span>
+          </button>
 
           <!-- OTT Filter Badges -->
           <div class="flex flex-wrap items-center gap-1 text-2xs sm:text-xs" id="ottFilterBadges">
@@ -1776,6 +1772,10 @@
         if (fab) fab.style.display = 'none';
         const badge = document.getElementById('readonlyHeaderBadge');
         if (badge) badge.classList.remove('hidden');
+        const headerBtns = document.getElementById('headerActionButtons');
+        if (headerBtns) headerBtns.remove();
+        const wlAddBtn = document.getElementById('watchlistHeaderAddBtn');
+        if (wlAddBtn) wlAddBtn.remove();
         const modal1 = document.getElementById('recordModal');
         if (modal1) modal1.remove();
         const modal2 = document.getElementById('watchlistAddModal');
