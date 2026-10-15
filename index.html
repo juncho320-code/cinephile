@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -154,15 +155,46 @@
       position: relative;
     }
 
+    /* Phase 3: Apple 3D Parallax & Dynamic Specular Glare */
     .interactive-card {
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
                   box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
                   border-color 0.2s ease;
     }
+    .interactive-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        420px circle at var(--glare-x, 50%) var(--glare-y, 0%),
+        rgba(255, 255, 255, 0.14) 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        transparent 75%
+      );
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .interactive-card:hover::before {
+      opacity: 1;
+    }
     .interactive-card:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.8), 0 0 20px -2px rgba(229, 169, 60, 0.2);
-      border-color: rgba(229, 169, 60, 0.5) !important;
+      box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.85), 
+                  0 1px 0 0 rgba(255, 255, 255, 0.25) inset, 
+                  0 0 24px -2px rgba(229, 169, 60, 0.22);
+      border-color: rgba(229, 169, 60, 0.45) !important;
+    }
+
+    /* Lucide 1.5px/1.8px Precision Stroke Styling */
+    [data-lucide] {
+      display: inline-block;
+      vertical-align: middle;
+      stroke-width: 1.8px;
     }
 
     @keyframes cardFadeSlide {
@@ -268,7 +300,7 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       <div class="flex items-center space-x-2.5">
         <div class="w-9 h-9 rounded-lg bg-cinema-gold/10 border border-cinema-gold/30 flex items-center justify-center text-cinema-gold text-lg">
-          <i class="fa-solid fa-film"></i>
+          <i data-lucide="film" class="w-5 h-5 text-cinema-gold"></i>
         </div>
         <div>
           <div class="flex items-center space-x-2">
@@ -319,7 +351,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 cursor-pointer select-none pb-2" onclick="toggleSection('sec-analytics')">
         <div class="flex items-center space-x-2.5">
           <div class="w-8 h-8 rounded-lg bg-cinema-gold/10 border border-cinema-gold/30 flex items-center justify-center text-cinema-gold text-sm">
-            <i class="fa-solid fa-chart-column"></i>
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-cinema-gold"></i>
           </div>
           <div>
             <h2 class="text-base sm:text-lg font-bold text-gray-100 flex items-center space-x-2">
@@ -333,23 +365,23 @@
           <!-- Chart Tab Switcher (Rating vs Era) -->
           <div class="inline-flex rounded-xl bg-cinema-black/80 border border-cinema-border p-1 text-xs">
             <button onclick="setChartTab('rating')" id="btnTabRating" class="chart-tab-btn active px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg text-2xs sm:text-xs transition flex items-center space-x-1.5">
-              <i class="fa-solid fa-star text-3xs"></i>
+              <i data-lucide="star" class="w-3 h-3 mr-1 text-cinema-gold"></i>
               <span>평점별 분포</span>
             </button>
             <button onclick="setChartTab('era')" id="btnTabEra" class="chart-tab-btn px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-lg text-2xs sm:text-xs transition flex items-center space-x-1.5 text-gray-400 hover:text-white">
-              <i class="fa-solid fa-timeline text-3xs"></i>
+              <i data-lucide="calendar" class="w-3 h-3 mr-1 text-cinema-gold"></i>
               <span>연도/시대별 분포</span>
             </button>
           </div>
 
           <button onclick="clearAllFilters()" id="btnClearFilter" class="hidden text-xs text-cinema-gold hover:underline font-semibold flex items-center space-x-1 px-2 py-1">
-            <i class="fa-solid fa-rotate-left"></i>
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">초기화</span>
           </button>
 
           <!-- Collapse Chevron -->
           <button onclick="toggleSection('sec-analytics')" aria-label="섹션 접기/펼치기" class="w-8 h-8 rounded-lg bg-cinema-card border border-cinema-border flex items-center justify-center text-cinema-muted hover:text-white transition">
-            <i id="chevron-sec-analytics" class="fa-solid fa-chevron-up section-chevron text-xs"></i>
+            <i id="chevron-sec-analytics" data-lucide="chevron-up" class="w-4 h-4 section-chevron text-cinema-muted"></i>
           </button>
         </div>
       </div>
@@ -420,7 +452,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 cursor-pointer select-none pb-2" onclick="toggleSection('sec-directors')">
         <div class="flex items-center space-x-2.5">
           <div class="w-8 h-8 rounded-lg bg-cinema-gold/10 border border-cinema-gold/30 flex items-center justify-center text-cinema-gold text-sm">
-            <i class="fa-solid fa-clapperboard"></i>
+            <i data-lucide="clapperboard" class="w-4 h-4 text-cinema-gold"></i>
           </div>
           <div>
             <h2 class="text-base sm:text-lg font-bold text-gray-100 flex items-center space-x-2">
@@ -520,23 +552,23 @@
           <!-- Dual View Mode Switcher: Magazine vs Compact List -->
           <div class="inline-flex rounded-lg bg-cinema-black/80 border border-cinema-border p-0.5 text-xs">
             <button onclick="setViewMode('magazine')" id="btnViewMagazine" class="view-mode-btn active px-3 py-1 rounded-md text-2xs font-semibold flex items-center space-x-1.5 transition" title="매거진/인용구 뷰">
-              <i class="fa-solid fa-quote-left text-3xs"></i>
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5 mr-1"></i>
               <span>매거진 뷰</span>
             </button>
             <button onclick="setViewMode('compact')" id="btnViewCompact" class="view-mode-btn px-3 py-1 rounded-md text-2xs font-semibold flex items-center space-x-1.5 transition text-gray-400 hover:text-white" title="컴팩트 목록 뷰">
-              <i class="fa-solid fa-list text-3xs"></i>
+              <i data-lucide="list" class="w-3.5 h-3.5 mr-1"></i>
               <span>목록 뷰</span>
             </button>
           </div>
 
           <!-- Search Input -->
           <div class="relative flex-1 sm:w-56">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-cinema-muted text-xs"></i>
+            <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-2.5 text-cinema-muted"></i>
             <input type="text" id="reviewSearchInput" oninput="filterReviews()" placeholder="제목, 감독, 한줄평 검색..." class="w-full bg-cinema-card border border-cinema-border rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-cinema-gold text-gray-200">
           </div>
 
           <button onclick="toggleSection('sec-movies')" aria-label="섹션 접기/펼치기" class="w-8 h-8 rounded-lg bg-cinema-card border border-cinema-border flex items-center justify-center text-cinema-muted hover:text-white transition">
-            <i id="chevron-sec-movies" class="fa-solid fa-chevron-up section-chevron text-xs"></i>
+            <i id="chevron-sec-movies" data-lucide="chevron-up" class="w-4 h-4 section-chevron text-cinema-muted"></i>
           </button>
         </div>
       </div>
@@ -554,7 +586,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 cursor-pointer select-none pb-2" onclick="toggleSection('sec-watchlist')">
         <div class="flex items-center space-x-2.5">
           <div class="w-8 h-8 rounded-lg bg-cinema-gold/10 border border-cinema-gold/30 flex items-center justify-center text-cinema-gold text-sm">
-            <i class="fa-solid fa-bookmark"></i>
+            <i data-lucide="bookmark" class="w-4 h-4 text-cinema-gold"></i>
           </div>
           <div>
             <div class="flex items-center space-x-2">
@@ -569,8 +601,7 @@
 
         <div class="flex items-center flex-wrap gap-2" onclick="event.stopPropagation()">
           <button id="watchlistHeaderAddBtn" onclick="openWatchlistModal()" class="shimmer-btn px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-bold text-2xs sm:text-xs transition shadow-md shadow-cinema-gold/20 flex items-center space-x-1.5 active:scale-95">
-            <i class="fa-solid fa-plus text-3xs"></i>
-            <span>볼 예정작 등록</span>
+            <i data-lucide="plus" class="w-3.5 h-3.5 mr-1"></i><span>볼 예정작 등록</span>
           </button>
 
           <!-- OTT Filter Badges -->
@@ -584,7 +615,7 @@
           </div>
 
           <button onclick="toggleSection('sec-watchlist')" aria-label="섹션 접기/펼치기" class="w-8 h-8 rounded-lg bg-cinema-card border border-cinema-border flex items-center justify-center text-cinema-muted hover:text-white transition">
-            <i id="chevron-sec-watchlist" class="fa-solid fa-chevron-up section-chevron text-xs"></i>
+            <i id="chevron-sec-watchlist" data-lucide="chevron-up" class="w-4 h-4 section-chevron text-cinema-muted"></i>
           </button>
         </div>
       </div>
@@ -602,12 +633,12 @@
   <!-- FLOATING ACTION BUTTON (FAB) -->
   <aside id="fabContainer" class="fixed bottom-6 right-5 sm:right-8 z-40 flex flex-col space-y-2">
     <button onclick="openWatchlistModal()" aria-label="새 볼 예정작 추가" class="flex items-center space-x-1.5 apple-glass-pill text-cinema-gold font-bold px-3.5 py-2.5 rounded-full shadow-xl hover:bg-cinema-gold/15 active:scale-95 transition text-xs">
-      <i class="fa-solid fa-bookmark text-xs"></i>
+      <i data-lucide="bookmark" class="w-3.5 h-3.5 text-cinema-gold"></i>
       <span class="hidden sm:inline">예정작 추가</span>
     </button>
     <button onclick="openAddModal()" aria-label="새 본 영화 기록 추가" class="relative group flex items-center space-x-2 bg-cinema-gold text-black font-extrabold px-4.5 py-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl shadow-cinema-gold/40 active:scale-95 hover:scale-105 transition">
       <span class="absolute inset-0 rounded-full bg-cinema-gold fab-pulse-ring"></span>
-      <i class="fa-solid fa-plus text-sm relative z-10"></i>
+      <i data-lucide="plus" class="w-4 h-4 relative z-10 text-black"></i>
       <span class="text-xs sm:text-sm tracking-tight relative z-10 font-bold">본 영화 기록</span>
     </button>
   </aside>
@@ -616,12 +647,12 @@
   <div id="recordModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
     <div class="modal-glass-container bg-cinema-card border border-cinema-border w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl relative modal-dialog-enter">
       <button onclick="closeAddModal()" class="absolute right-4 top-4 text-cinema-muted hover:text-white text-lg">
-        <i class="fa-solid fa-xmark"></i>
+        <i data-lucide="x" class="w-5 h-5"></i>
       </button>
       
       <div class="flex items-center space-x-2.5 mb-4">
         <div class="w-8 h-8 rounded-lg bg-cinema-gold/10 text-cinema-gold flex items-center justify-center">
-          <i class="fa-solid fa-pen-nib"></i>
+          <i data-lucide="pen-tool" class="w-4 h-4 text-cinema-gold mr-2"></i>
         </div>
         <h3 id="modalTitleText" class="text-base sm:text-lg font-bold font-serifKr">영화 기록 및 한줄평 등록</h3>
       </div>
@@ -1820,7 +1851,53 @@
       }
     });
 
-    function initApp() {
+    
+    // Phase 2 & 3: Apple UI Engine (Lucide Icons + 3D Parallax Glare)
+    function refreshLucideIcons() {
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+    }
+
+    function initAppleParallax() {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      const cards = document.querySelectorAll('.interactive-card');
+      cards.forEach(card => {
+        if (card.dataset.tiltInitialized === 'true') return;
+        card.dataset.tiltInitialized = 'true';
+
+        let bounds = null;
+        let isHovered = false;
+
+        card.addEventListener('pointerenter', () => {
+          bounds = card.getBoundingClientRect();
+          isHovered = true;
+          card.style.transition = 'none';
+        });
+
+        card.addEventListener('pointermove', (e) => {
+          if (!isHovered || !bounds) return;
+          const x = e.clientX - bounds.left;
+          const y = e.clientY - bounds.top;
+          const xPct = Math.max(0, Math.min(1, x / bounds.width));
+          const yPct = Math.max(0, Math.min(1, y / bounds.height));
+
+          const rotX = ((0.5 - yPct) * 6).toFixed(2);
+          const rotY = ((xPct - 0.5) * 6).toFixed(2);
+
+          card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.015, 1.015, 1.015)`;
+          card.style.setProperty('--glare-x', `${(xPct * 100).toFixed(1)}%`);
+          card.style.setProperty('--glare-y', `${(yPct * 100).toFixed(1)}%`);
+        });
+
+        card.addEventListener('pointerleave', () => {
+          isHovered = false;
+          card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease';
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      });
+    }
+function initApp() {
       if (IS_READONLY) {
         const fab = document.getElementById('fabContainer');
         if (fab) fab.style.display = 'none';
@@ -1846,6 +1923,8 @@
       setViewMode(currentViewMode);
       renderWatchlist();
       initSectionToggles();
+      refreshLucideIcons();
+      initAppleParallax();
     }
 
     window.onload = initApp;
