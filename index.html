@@ -339,19 +339,21 @@
       </div>
 
       <!-- Quick Metrics & Global Add Buttons -->
-      <div class="flex items-center space-x-3 sm:space-x-5 text-xs">
-        <div class="flex items-center space-x-3 sm:space-x-5">
+      <div class="flex items-center space-x-3 sm:space-x-4 text-xs">
+        <div class="apple-glass-pill px-3.5 py-1.5 rounded-xl flex items-center space-x-3 sm:space-x-5">
           <div class="text-center">
-            <div class="text-2xs text-cinema-muted">총 감상</div>
+            <div class="text-3xs sm:text-2xs text-cinema-muted uppercase tracking-wider font-mono">총 감상</div>
             <div id="statTotal" class="font-bold text-cinema-gold font-cinzel text-sm sm:text-base">290</div>
           </div>
+          <div class="w-px h-6 bg-cinema-border/60"></div>
           <div class="text-center">
-            <div class="text-2xs text-cinema-muted">한줄평</div>
-            <div id="statReviews" class="font-bold text-gray-200 font-cinzel text-sm sm:text-base">26</div>
+            <div class="text-3xs sm:text-2xs text-cinema-muted uppercase tracking-wider font-mono">한줄평</div>
+            <div id="statReviews" class="font-bold text-gray-100 font-cinzel text-sm sm:text-base">26</div>
           </div>
+          <div class="w-px h-6 bg-cinema-border/60"></div>
           <div class="text-center">
-            <div class="text-2xs text-cinema-muted">볼 예정작</div>
-            <div id="statWatchlist" class="font-bold text-gray-200 font-cinzel text-sm sm:text-base">39</div>
+            <div class="text-3xs sm:text-2xs text-cinema-muted uppercase tracking-wider font-mono">예정작</div>
+            <div id="statWatchlist" class="font-bold text-gray-100 font-cinzel text-sm sm:text-base">39</div>
           </div>
         </div>
 
@@ -1428,54 +1430,89 @@
       }
 
       if (currentViewMode === 'magazine') {
-        // Magazine / Detailed Editorial Review Cards (3-column)
-        container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5";
+        // Magazine / Detailed Editorial Review Cards (3-column) - Criterion & Tri-Engine Web Design Edition
+        container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4";
 
         list.forEach((m, idx) => {
           const card = document.createElement('div');
-          card.className = "glass-card interactive-card card-enter rounded-xl p-4 flex flex-col justify-between";
+          card.className = "glass-card interactive-card card-enter rounded-2xl p-4 sm:p-5 flex flex-col justify-between group transition-all duration-300";
           card.style.animationDelay = `${Math.min(idx * 0.02, 0.25)}s`;
           card.innerHTML = `
             <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-cinema-gold font-bold font-cinzel text-sm">★ ${m.rating.toFixed(1)}</span>
-                <span class="text-cinema-muted text-2xs font-mono">${m.year || ''}</span>
+              <!-- Card Top Header: Gold Rating Pill & Year Badge -->
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-cinema-gold/15 border border-cinema-gold/35 text-cinema-gold text-xs font-bold font-cinzel tracking-wide shadow-sm">
+                  <span class="text-xs">★</span>
+                  <span>${m.rating.toFixed(1)}</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  ${m.has_review ? `
+                    <span class="px-2 py-0.5 rounded text-3xs font-mono font-semibold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span>Review</span>
+                    </span>
+                  ` : ''}
+                  <span class="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-cinema-muted text-2xs font-mono tracking-wider">${m.year || 'N/A'}</span>
+                </div>
               </div>
-              <h4 class="font-bold text-sm text-gray-100 mb-1 truncate" title="${m.title}">${m.title}</h4>
+
+              <!-- Movie Title -->
+              <h4 class="font-bold text-[15px] sm:text-base text-gray-100 group-hover:text-cinema-gold transition-colors mb-1.5 truncate" title="${m.title}">${m.title}</h4>
+
+              <!-- Director Metadata Line -->
               ${m.director ? `
-                <div class="text-2xs text-cinema-muted mb-2 flex items-center justify-between">
-                  <span><i class="fa-solid fa-user-tie mr-1 text-cinema-gold/70"></i>${m.director}</span>
+                <div class="text-xs text-cinema-muted mb-3 flex items-center justify-between">
+                  <span class="flex items-center space-x-1.5 text-gray-300 font-medium">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-cinema-gold/80"></i>
+                    <span>${m.director}</span>
+                  </span>
+                  <button onclick="event.stopPropagation(); selectDirector('${m.director.replace(/'/g, "'")}'); document.getElementById('sec-directors').scrollIntoView({behavior: 'smooth'});" class="text-3xs text-cinema-gold hover:underline font-mono">
+                    완주율 보기 →
+                  </button>
                 </div>
               ` : (IS_READONLY ? `
-                <div class="text-2xs text-cinema-muted/60 mb-2 italic">감독 정보 미상</div>
+                <div class="text-xs text-cinema-muted/60 mb-3 italic">감독 정보 미상</div>
               ` : `
-                <div class="mb-2">
-                  <button onclick="openCommentModal('${m.title}', '${m.year}', '', ${m.rating}, '${(m.comment||'').replace(/'/g, "\'")}', 'director')" class="text-2xs text-amber-400 hover:text-amber-300 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 px-2 py-0.5 rounded flex items-center space-x-1 transition active:scale-95">
+                <div class="mb-3">
+                  <button onclick="openCommentModal('${m.title}', '${m.year}', '', ${m.rating}, '${(m.comment||'').replace(/'/g, "'")}', 'director')" class="text-2xs text-amber-400 hover:text-amber-300 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 px-2.5 py-1 rounded-md flex items-center space-x-1.5 transition active:scale-95">
                     <i class="fa-solid fa-plus text-3xs"></i>
                     <span>감독 정보 등록</span>
                   </button>
                 </div>
               `)}
+
+              <!-- One-Line Review Quote (Editorial High-End Style) -->
               ${m.comment ? `
-                <div class="relative pl-3.5 pr-2.5 py-2 rounded-r-lg bg-gradient-to-r from-cinema-gold/[0.09] via-cinema-gold/[0.02] to-transparent border-l-2 border-cinema-gold/70 text-xs text-gray-200 font-serifKr italic leading-relaxed shadow-sm">
-                  “${m.comment}”
+                <div class="relative pl-3.5 pr-2.5 py-2.5 rounded-r-lg bg-gradient-to-r from-cinema-gold/[0.09] via-cinema-gold/[0.02] to-transparent border-l-2 border-cinema-gold text-xs text-gray-200 font-serifKr italic leading-relaxed shadow-sm">
+                  <span class="text-cinema-gold font-serif text-sm mr-1 leading-none select-none">“</span>${m.comment}<span class="text-cinema-gold font-serif text-sm ml-1 leading-none select-none">”</span>
                 </div>
               ` : `
-                <div class="py-1.5 text-2xs text-cinema-muted italic">한줄평 미등록</div>
+                <div class="py-2 text-2xs text-cinema-muted/60 italic flex items-center space-x-1.5">
+                  <i data-lucide="feather" class="w-3.5 h-3.5 opacity-40"></i>
+                  <span>한줄평 미등록 (사유 기록)</span>
+                </div>
               `}
             </div>
-            <div class="mt-3 pt-2 border-t border-cinema-border/30 flex items-center justify-between text-2xs">
-              <span class="text-cinema-muted truncate">${m.comment ? '리뷰 노트 보관됨' : (!m.director ? '감독/리뷰 미등록' : '평점 기록됨')}</span>
+
+            <!-- Card Bottom Bar -->
+            <div class="mt-4 pt-2.5 border-t border-cinema-border/40 flex items-center justify-between text-2xs">
+              <span class="text-cinema-muted truncate flex items-center space-x-1.5">
+                ${m.has_review ? '<i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400"></i><span class="text-emerald-400/90 font-mono">볼트 리뷰 연동</span>' : (m.comment ? '<i data-lucide="check" class="w-3.5 h-3.5 text-cinema-gold"></i><span>한줄평 보관됨</span>' : '<span class="text-cinema-muted/70">평점 기록됨</span>')}
+              </span>
               ${!IS_READONLY ? `
-                <button onclick="openCommentModal('${m.title}', '${m.year}', '${(m.director||'').replace(/'/g, "\'")}', ${m.rating}, '${(m.comment||'').replace(/'/g, "\'")}')" class="text-cinema-gold hover:underline flex items-center space-x-1 active:scale-95 transition">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                  <span>${!m.director ? '감독/한줄평 입력' : '정보/한줄평 수정'}</span>
+                <button onclick="openCommentModal('${m.title}', '${m.year}', '${(m.director||'').replace(/'/g, "'")}', ${m.rating}, '${(m.comment||'').replace(/'/g, "'")}')" class="text-cinema-gold hover:text-cinema-goldLight flex items-center space-x-1 active:scale-95 transition font-semibold">
+                  <i class="fa-solid fa-pen-to-square text-3xs"></i>
+                  <span>${!m.director ? '감독/리뷰 입력' : (m.comment ? '수정' : '+ 한줄평')}</span>
                 </button>
               ` : ''}
             </div>
           `;
           container.appendChild(card);
         });
+        if (window.lucide && typeof lucide.createIcons === 'function') {
+          lucide.createIcons();
+        }
+
       } else {
         // Compact Table View
         container.className = "w-full glass-card rounded-xl overflow-hidden border border-cinema-border";
@@ -1572,6 +1609,9 @@
         `;
         container.appendChild(card);
       });
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
     }
 
     function setRating(val) {
