@@ -438,21 +438,28 @@
 
       <!-- Quick Metrics & Global Add Buttons -->
       <div class="flex items-center space-x-2 sm:space-x-4 text-xs flex-shrink-0">
-        <div class="apple-glass-pill px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-xl flex items-center space-x-2.5 sm:space-x-5">
+        <!-- Desktop Full Metrics Pill -->
+        <div class="hidden sm:flex apple-glass-pill px-3.5 py-1.5 rounded-xl items-center space-x-5">
           <div class="text-center">
-            <div class="text-3xs text-cinema-muted uppercase tracking-wider font-mono scale-90 sm:scale-100">총 감상</div>
-            <div id="statTotal" class="font-bold text-cinema-gold font-cinzel text-xs sm:text-base">290</div>
+            <div class="text-2xs text-cinema-muted uppercase tracking-wider font-mono">총 감상</div>
+            <div id="statTotal" class="font-bold text-cinema-gold font-cinzel text-base">290</div>
           </div>
-          <div class="w-px h-5 sm:h-6 bg-cinema-border/60"></div>
+          <div class="w-px h-6 bg-cinema-border/60"></div>
           <div class="text-center">
-            <div class="text-3xs text-cinema-muted uppercase tracking-wider font-mono scale-90 sm:scale-100">한줄평</div>
-            <div id="statReviews" class="font-bold text-gray-100 font-cinzel text-xs sm:text-base">26</div>
+            <div class="text-2xs text-cinema-muted uppercase tracking-wider font-mono">한줄평</div>
+            <div id="statReviews" class="font-bold text-gray-100 font-cinzel text-base">26</div>
           </div>
-          <div class="w-px h-5 sm:h-6 bg-cinema-border/60"></div>
+          <div class="w-px h-6 bg-cinema-border/60"></div>
           <div class="text-center">
-            <div class="text-3xs text-cinema-muted uppercase tracking-wider font-mono scale-90 sm:scale-100">예정작</div>
-            <div id="statWatchlist" class="font-bold text-gray-100 font-cinzel text-xs sm:text-base">39</div>
+            <div class="text-2xs text-cinema-muted uppercase tracking-wider font-mono">예정작</div>
+            <div id="statWatchlist" class="font-bold text-gray-100 font-cinzel text-base">39</div>
           </div>
+        </div>
+
+        <!-- Mobile Compact Metrics Pill -->
+        <div class="flex sm:hidden apple-glass-pill px-3 py-1.5 rounded-xl items-center space-x-2">
+          <span class="text-3xs text-cinema-muted font-mono uppercase tracking-wider">총</span>
+          <span id="statTotalMob" class="font-bold text-cinema-gold font-cinzel text-xs">290편</span>
         </div>
 
         <div id="headerActionButtons" class="hidden md:flex items-center space-x-2 pl-3 border-l border-cinema-border">
@@ -2584,6 +2591,7 @@
         if (modal2) modal2.remove();
       }
       animateCounter('statTotal', RAW_DATA.total_count, 900);
+      animateCounter('statTotalMob', RAW_DATA.total_count, 900);
       animateCounter('statReviews', RAW_DATA.review_count, 900);
       animateCounter('statWatchlist', RAW_DATA.watchlist_count, 900);
       renderRatingPills();
