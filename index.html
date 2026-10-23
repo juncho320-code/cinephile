@@ -310,13 +310,89 @@
     .custom-scroll::-webkit-scrollbar-thumb:hover {
       background: #e5a93c;
     }
+
+    /* 3D Card Gyroscopic Tilt & Kinetic Surface (Awwwards Motion DNA) */
+    .magazine-card {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      will-change: transform;
+      position: relative;
+    }
+    .magazine-card:hover {
+      box-shadow: 
+        0 1px 0 0 rgba(255, 255, 255, 0.25) inset,
+        0 -1px 0 0 rgba(0, 0, 0, 0.5) inset,
+        0 24px 50px -10px rgba(0, 0, 0, 0.9),
+        0 0 30px 0 rgba(229, 169, 60, 0.12);
+      border-color: rgba(229, 169, 60, 0.35);
+    }
+    .card-shimmer {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.14), transparent 80%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    .magazine-card:hover .card-shimmer {
+      opacity: 1;
+    }
+
+    /* Dynamic Backdrop Ambient Lighting */
+    .ambient-glow-dynamic {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(110px);
+      mix-blend-mode: screen;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease, background 1.5s ease;
+      will-change: transform, opacity, background;
+      opacity: 0.85;
+    }
+
+    /* Auteur Constellation Canvas & Tooltip */
+    #constellationCanvas {
+      background: radial-gradient(circle at 50% 50%, rgba(14, 18, 26, 0.95) 0%, rgba(6, 7, 9, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: crosshair;
+    }
+    .constellation-tooltip {
+      position: absolute;
+      pointer-events: none;
+      z-index: 40;
+      background: rgba(14, 18, 26, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(229, 169, 60, 0.3);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+      border-radius: 12px;
+      padding: 10px 14px;
+      transform: translate(-50%, -120%);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    /* Taste-RAG & Double Feature Modals */
+    .rag-command-modal {
+      background: rgba(10, 13, 18, 0.88) !important;
+      background-image: linear-gradient(135deg, rgba(56, 189, 248, 0.05) 0%, rgba(229, 169, 60, 0.03) 100%) !important;
+      backdrop-filter: blur(36px) saturate(210%) contrast(108%) !important;
+      -webkit-backdrop-filter: blur(36px) saturate(210%) contrast(108%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      box-shadow: 0 28px 60px -15px rgba(0, 0, 0, 0.9) !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-cinema-gold selection:text-black relative">
   <!-- 35mm Analog Film Grain Texture Overlay -->
   <div class="film-grain"></div>
 
-  <!-- Dynamic Ambient Lighting Background (visionOS Mesh) -->
+  <!-- Dynamic Ambient Lighting Background (visionOS Mesh & Reactive Color) -->
+  <div id="ambientGlowA" class="cinema-ambient-spotlight ambient-glow-dynamic" style="top: 15%; left: 30%; width: 800px; height: 800px; background: radial-gradient(circle, rgba(229, 169, 60, 0.15) 0%, transparent 70%);"></div>
+  <div id="ambientGlowB" class="cinema-ambient-spotlight ambient-glow-dynamic" style="bottom: 10%; right: 20%; width: 720px; height: 720px; background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 75%);"></div>
   <div class="cinema-ambient-spotlight spotlight-1"></div>
   <div class="cinema-ambient-spotlight spotlight-2"></div>
   <div class="cinema-ambient-spotlight spotlight-3"></div>
@@ -358,6 +434,11 @@
         </div>
 
         <div id="headerActionButtons" class="hidden md:flex items-center space-x-2 pl-3 border-l border-cinema-border">
+          <button onclick="openRagModal()" class="px-3 py-1.5 rounded-lg bg-cyan-950/50 border border-cyan-500/40 hover:border-cyan-400 text-cyan-200 font-semibold text-xs transition flex items-center space-x-1.5 shadow-md shadow-cyan-950/40 active:scale-95">
+            <i class="fa-solid fa-wand-magic-sparkles text-3xs text-cyan-400"></i>
+            <span>Taste-RAG</span>
+            <span class="text-3xs bg-cyan-900/80 px-1 py-0.2 rounded text-cyan-300 font-mono">K</span>
+          </button>
           <button onclick="openAddModal()" class="px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-bold text-xs hover:bg-cinema-goldLight transition flex items-center space-x-1 shadow-md shadow-cinema-gold/20 active:scale-95">
             <i class="fa-solid fa-plus text-3xs"></i>
             <span>본 영화 기록</span>
@@ -492,6 +573,16 @@
         </div>
 
         <div class="flex items-center space-x-2" onclick="event.stopPropagation()">
+          <div class="flex items-center space-x-1.5 text-xs mr-2 border-r border-cinema-border pr-2">
+            <button onclick="setDirectorView('chips')" id="btnDirViewChips" class="px-2.5 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs flex items-center space-x-1">
+              <i class="fa-solid fa-chart-pie text-3xs"></i>
+              <span>도넛 뷰</span>
+            </button>
+            <button onclick="setDirectorView('constellation')" id="btnDirViewConstellation" class="px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1">
+              <i class="fa-solid fa-wand-magic-sparkles text-3xs text-cinema-gold"></i>
+              <span>성좌 맵 (Constellation)</span>
+            </button>
+          </div>
           <div class="flex items-center space-x-1.5 text-xs">
             <button onclick="sortDirectors('avg')" id="btnSortAvg" class="px-3 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs">최고 평점순</button>
             <button onclick="sortDirectors('count')" id="btnSortCount" class="px-3 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs">최다 관람순</button>
@@ -504,8 +595,30 @@
 
       <!-- Collapsible Body -->
       <div id="body-sec-directors" class="mt-4 space-y-4">
-        <!-- Director Chips -->
-        <div id="directorChips" class="flex flex-wrap gap-1.5 sm:gap-2">
+        <!-- Interactive Auteur Constellation Canvas View (Toggleable) -->
+        <div id="directorConstellationBox" class="hidden relative rounded-2xl overflow-hidden border border-cinema-border bg-cinema-black/90 p-3 sm:p-4">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <div class="flex items-center space-x-2 text-xs text-cinema-muted">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-cinema-gold shadow-sm shadow-cinema-gold"></span>
+              <span class="text-3xs sm:text-2xs font-mono">100% 완주 감독 (골드 펄스)</span>
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-cyan-400 ml-2"></span>
+              <span class="text-3xs sm:text-2xs font-mono">진행 중 (노드 크기 = 관람 편수)</span>
+            </div>
+            <div class="text-3xs text-gray-500 font-mono">노드 클릭 시 해당 감독 필모그래피 즉시 연동</div>
+          </div>
+          <div class="relative w-full">
+            <canvas id="constellationCanvas" class="w-full h-[360px] sm:h-[420px] rounded-xl"></canvas>
+            <div id="constellationTooltip" class="constellation-tooltip hidden">
+              <div id="constTooltipName" class="font-bold text-cinema-gold text-xs sm:text-sm font-serifKr"></div>
+              <div id="constTooltipMeta" class="text-2xs text-gray-300 mt-0.5 font-mono"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Director Chips Container -->
+        <div id="directorChipsContainer" class="space-y-4">
+          <!-- Director Chips -->
+          <div id="directorChips" class="flex flex-wrap gap-1.5 sm:gap-2">
           <!-- Rendered via JS -->
         </div>
 
@@ -555,6 +668,7 @@
               <div id="dirWatchlist" class="space-y-1.5 text-xs custom-scroll max-h-56 overflow-y-auto pr-1"></div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>
@@ -816,6 +930,86 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: TASTE-RAG SEMANTIC MOOD SEARCH -->
+  <div id="ragSearchModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
+    <div class="rag-command-modal w-full max-w-2xl rounded-2xl p-5 sm:p-7 shadow-2xl relative modal-dialog-enter border border-cyan-500/30 flex flex-col max-h-[88vh]">
+      <button onclick="closeRagModal()" class="absolute right-4 top-4 text-gray-400 hover:text-white text-lg">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center space-x-2.5 mb-3">
+        <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
+          <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold font-serifKr text-cyan-300">Taste-RAG: 자연어 감성 & 무드 시맨틱 검색</h3>
+          <p class="text-3xs sm:text-2xs text-gray-400">볼트 293편 평점, 상세 감상평, LanceDB 벡터 공간을 횡단하는 취향 검색</p>
+        </div>
+      </div>
+      <div class="relative mb-3">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-cyan-400/70 text-xs"></i>
+        <input type="text" id="ragSearchInput" oninput="handleRagSearchInput(event)" placeholder="예: 비 오는 늦은 밤 위스키와 어울리는 90년대 차가운 누아르..." class="w-full bg-cinema-black/90 border border-cyan-500/40 focus:border-cyan-400 rounded-xl pl-9 pr-10 py-2.5 text-xs sm:text-sm text-gray-100 placeholder-gray-500 focus:outline-none shadow-inner">
+        <div id="ragSearchSpinner" class="hidden absolute right-3 top-2.5 text-cyan-400">
+          <i class="fa-solid fa-circle-notch fa-spin text-xs"></i>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-1.5 mb-4 text-3xs sm:text-2xs">
+        <span class="text-gray-500 py-0.5">추천 프롬프트:</span>
+        <button onclick="applyRagPrompt('비 오는 늦은 밤 위스키와 어울리는 90년대 차가운 누아르')" class="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 hover:border-cyan-400 transition">🌙 늦은 밤 차가운 누아르</button>
+        <button onclick="applyRagPrompt('압도적인 고독과 우주의 심연, 말이 없는 SF')" class="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 hover:border-cyan-400 transition">🌌 우주와 압도적 고독</button>
+        <button onclick="applyRagPrompt('복수의 우로보로스와 인간의 죄책감, 처벌')" class="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 hover:border-cyan-400 transition">⚔️ 복수와 죄책감</button>
+        <button onclick="applyRagPrompt('수직적 공간의 계급과 서늘한 서스펜스')" class="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 hover:border-cyan-400 transition">🩸 서스펜스와 계급</button>
+      </div>
+      <div id="ragResultsContainer" class="flex-1 overflow-y-auto custom-scroll space-y-2.5 pr-1 min-h-[200px]">
+        <div class="text-center py-12 text-gray-500 text-xs">
+          <i class="fa-solid fa-brain text-2xl text-cyan-500/40 mb-2 block"></i>
+          자연어 무드나 감성을 입력하면 개인 취향 벡터가 가장 높은 영화를 큐레이션합니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: AI DOUBLE FEATURE PROGRAMMER -->
+  <div id="doubleFeatureModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4 transition-opacity">
+    <div class="modal-glass-container bg-cinema-card border border-cinema-border w-full max-w-2xl rounded-2xl p-5 sm:p-7 shadow-2xl relative modal-dialog-enter max-h-[90vh] overflow-y-auto custom-scroll">
+      <button onclick="closeDoubleFeatureModal()" class="absolute right-4 top-4 text-cinema-muted hover:text-white text-lg">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center space-x-2.5 mb-4 border-b border-cinema-border pb-3">
+        <div class="w-8 h-8 rounded-lg bg-cinema-gold/10 text-cinema-gold flex items-center justify-center border border-cinema-gold/30">
+          <i class="fa-solid fa-film text-xs"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold font-serifKr text-cinema-gold">AI 더블 피처 (Double Feature) 프로그래머</h3>
+          <p class="text-3xs sm:text-2xs text-cinema-muted">5.0점 마스터피스 대척점 및 미학적 공명작 심야 연속 상영 페어링</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+        <div id="dfCardSource" class="bg-cinema-black/70 border border-cinema-gold/30 rounded-xl p-4 relative">
+          <div class="text-3xs text-cinema-gold font-mono uppercase tracking-wider mb-1">PART 1 • 관람작</div>
+          <h4 id="dfSourceTitle" class="text-base font-bold text-gray-100 font-serifKr"></h4>
+          <div id="dfSourceMeta" class="text-2xs text-cinema-muted mt-0.5"></div>
+          <div id="dfSourceRating" class="text-xs text-cinema-gold font-bold mt-2"></div>
+        </div>
+        <div id="dfCardPair" class="bg-cinema-black/70 border border-cyan-500/30 rounded-xl p-4 relative">
+          <div class="text-3xs text-cyan-400 font-mono uppercase tracking-wider mb-1">PART 2 • 큐레이션 페어링</div>
+          <h4 id="dfPairTitle" class="text-base font-bold text-gray-100 font-serifKr"></h4>
+          <div id="dfPairMeta" class="text-2xs text-cinema-muted mt-0.5"></div>
+          <div id="dfPairRating" class="text-xs text-cyan-300 font-bold mt-2"></div>
+        </div>
+      </div>
+      <div class="bg-cinema-black/90 border border-cinema-border rounded-xl p-4 sm:p-5 mb-4">
+        <div class="flex items-center space-x-2 text-xs font-bold text-cinema-gold mb-2">
+          <i class="fa-solid fa-quote-left text-3xs"></i>
+          <span id="dfRelationBadge">미학적 대척점 및 관전 포인트</span>
+        </div>
+        <p id="dfRationaleText" class="text-xs sm:text-sm text-gray-300 leading-relaxed font-serifKr italic"></p>
+      </div>
+      <div class="flex items-center justify-end">
+        <button onclick="closeDoubleFeatureModal()" class="px-4 py-2 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 text-xs font-semibold transition">닫기</button>
+      </div>
     </div>
   </div>
 
@@ -1435,9 +1629,12 @@
 
         list.forEach((m, idx) => {
           const card = document.createElement('div');
-          card.className = "glass-card interactive-card card-enter rounded-2xl p-4 sm:p-5 flex flex-col justify-between group transition-all duration-300";
+          card.className = "magazine-card glass-card interactive-card card-enter rounded-2xl p-4 sm:p-5 flex flex-col justify-between group transition-all duration-300 relative overflow-hidden";
           card.style.animationDelay = `${Math.min(idx * 0.02, 0.25)}s`;
+          card.dataset.movieRating = m.rating;
+          card.dataset.movieTitle = m.title;
           card.innerHTML = `
+            <div class="card-shimmer"></div>
             <div>
               <!-- Card Top Header: Gold Rating Pill & Year Badge -->
               <div class="flex items-center justify-between gap-2 mb-2.5">
@@ -1495,16 +1692,24 @@
             </div>
 
             <!-- Card Bottom Bar -->
-            <div class="mt-4 pt-2.5 border-t border-cinema-border/40 flex items-center justify-between text-2xs">
+            <div class="mt-4 pt-2.5 border-t border-cinema-border/40 flex items-center justify-between text-2xs relative z-10">
               <span class="text-cinema-muted truncate flex items-center space-x-1.5">
                 ${m.has_review ? '<i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400"></i><span class="text-emerald-400/90 font-mono">볼트 리뷰 연동</span>' : (m.comment ? '<i data-lucide="check" class="w-3.5 h-3.5 text-cinema-gold"></i><span>한줄평 보관됨</span>' : '<span class="text-cinema-muted/70">평점 기록됨</span>')}
               </span>
-              ${!IS_READONLY ? `
-                <button onclick="openCommentModal('${m.title}', '${m.year}', '${(m.director||'').replace(/'/g, "'")}', ${m.rating}, '${(m.comment||'').replace(/'/g, "'")}')" class="text-cinema-gold hover:text-cinema-goldLight flex items-center space-x-1 active:scale-95 transition font-semibold">
-                  <i class="fa-solid fa-pen-to-square text-3xs"></i>
-                  <span>${!m.director ? '감독/리뷰 입력' : (m.comment ? '수정' : '+ 한줄평')}</span>
-                </button>
-              ` : ''}
+              <div class="flex items-center space-x-2">
+                ${m.rating >= 4.5 ? `
+                  <button onclick="event.stopPropagation(); openDoubleFeatureModal('${m.title.replace(/'/g, "'")}')" class="text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 active:scale-95 transition font-semibold text-3xs bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/40" title="AI 더블 피처 페어링 보기">
+                    <i class="fa-solid fa-film text-3xs"></i>
+                    <span>더블 피처</span>
+                  </button>
+                ` : ''}
+                ${!IS_READONLY ? `
+                  <button onclick="openCommentModal('${m.title}', '${m.year}', '${(m.director||'').replace(/'/g, "'")}', ${m.rating}, '${(m.comment||'').replace(/'/g, "'")}')" class="text-cinema-gold hover:text-cinema-goldLight flex items-center space-x-1 active:scale-95 transition font-semibold">
+                    <i class="fa-solid fa-pen-to-square text-3xs"></i>
+                    <span>${!m.director ? '감독/리뷰 입력' : (m.comment ? '수정' : '+ 한줄평')}</span>
+                  </button>
+                ` : ''}
+              </div>
             </div>
           `;
           container.appendChild(card);
@@ -1512,6 +1717,8 @@
         if (window.lucide && typeof lucide.createIcons === 'function') {
           lucide.createIcons();
         }
+        initAppleParallax();
+        initDynamicAmbientLighting();
 
       } else {
         // Compact Table View
@@ -1912,9 +2119,14 @@
       } else if (e.key === 'g' || e.key === 'G') {
         e.preventDefault();
         toggleViewMode();
+      } else if (e.key === 'k' || e.key === 'K') {
+        e.preventDefault();
+        openRagModal();
       } else if (e.key === 'Escape') {
         closeAddModal();
         closeWatchlistModal();
+        closeRagModal();
+        closeDoubleFeatureModal();
       }
     });
 
@@ -1964,7 +2176,373 @@
         });
       });
     }
-function initApp() {
+
+    // -------------------------------------------------------------------------
+    // Dynamic Backdrop Ambient Lighting (visionOS Reactive Mesh)
+    // -------------------------------------------------------------------------
+    function initDynamicAmbientLighting() {
+      const glowA = document.getElementById('ambientGlowA');
+      const glowB = document.getElementById('ambientGlowB');
+      if (!glowA || !glowB) return;
+
+      const cards = document.querySelectorAll('.magazine-card, tr');
+      cards.forEach(el => {
+        if (el.dataset.ambientBound === 'true') return;
+        el.dataset.ambientBound = 'true';
+
+        el.addEventListener('mouseenter', () => {
+          const rating = parseFloat(el.dataset.movieRating || '4.0');
+          let colorA = 'rgba(229, 169, 60, 0.18)';
+          let colorB = 'rgba(56, 189, 248, 0.12)';
+
+          if (rating >= 5.0) {
+            colorA = 'rgba(229, 169, 60, 0.28)';
+            colorB = 'rgba(245, 158, 11, 0.20)';
+          } else if (rating >= 4.5) {
+            colorA = 'rgba(245, 158, 11, 0.22)';
+            colorB = 'rgba(229, 9, 20, 0.14)';
+          } else if (rating >= 4.0) {
+            colorA = 'rgba(56, 189, 248, 0.18)';
+            colorB = 'rgba(148, 163, 184, 0.12)';
+          } else {
+            colorA = 'rgba(100, 116, 139, 0.15)';
+            colorB = 'rgba(30, 41, 59, 0.20)';
+          }
+
+          const rect = el.getBoundingClientRect();
+          glowA.style.background = 'radial-gradient(circle, ' + colorA + ' 0%, transparent 70%)';
+          glowB.style.background = 'radial-gradient(circle, ' + colorB + ' 0%, transparent 75%)';
+          glowA.style.transform = 'translate3d(0, ' + Math.max(-200, (rect.top - 200) * 0.4) + 'px, 0)';
+        });
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // The Auteur Constellation (감독 성좌 캔버스 엔진)
+    // -------------------------------------------------------------------------
+    let currentDirectorView = 'chips';
+    let constellationNodes = [];
+    let constellationAnimId = null;
+
+    function setDirectorView(view) {
+      currentDirectorView = view;
+      const btnChips = document.getElementById('btnDirViewChips');
+      const btnConst = document.getElementById('btnDirViewConstellation');
+      const boxConst = document.getElementById('directorConstellationBox');
+      const boxChips = document.getElementById('directorChipsContainer');
+
+      if (view === 'constellation') {
+        btnConst.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs flex items-center space-x-1';
+        btnChips.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1';
+        boxConst.classList.remove('hidden');
+        boxChips.classList.add('hidden');
+        renderConstellationCanvas();
+      } else {
+        btnChips.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs flex items-center space-x-1';
+        btnConst.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1';
+        boxChips.classList.remove('hidden');
+        boxConst.classList.add('hidden');
+      }
+    }
+
+    function initAuteurConstellation() {
+      const canvas = document.getElementById('constellationCanvas');
+      if (!canvas) return;
+
+      const dStats = Object.values(RAW_DATA.director_stats || {})
+        .filter(d => d.watched_count >= 1)
+        .sort((a, b) => b.watched_count - a.watched_count)
+        .slice(0, 18);
+
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = (rect.width || 800) * dpr;
+      canvas.height = (rect.height || 400) * dpr;
+      ctx.scale(dpr, dpr);
+
+      const w = rect.width || 800;
+      const h = rect.height || 400;
+
+      constellationNodes = dStats.map((d, i) => {
+        const angle = (i / dStats.length) * Math.PI * 2;
+        const radiusDist = (i % 2 === 0) ? (h * 0.35) : (h * 0.22);
+        const total = d.watched_count + (d.watchlist_movies ? d.watchlist_movies.length : 0);
+        const percent = total > 0 ? Math.round((d.watched_count / total) * 100) : 0;
+        return {
+          director: d.name,
+          watched: d.watched_count,
+          total: total,
+          percent: percent,
+          avg: d.avg_rating,
+          x: w / 2 + Math.cos(angle) * radiusDist * (w / (h * 1.6)),
+          y: h / 2 + Math.sin(angle) * radiusDist,
+          radius: Math.min(8 + d.watched_count * 1.8, 22),
+          pulse: Math.random() * Math.PI * 2
+        };
+      });
+
+      canvas.addEventListener('mousemove', handleConstellationMouseMove);
+      canvas.addEventListener('click', handleConstellationClick);
+      canvas.addEventListener('mouseleave', () => {
+        const tt = document.getElementById('constellationTooltip');
+        if (tt) tt.classList.add('hidden');
+      });
+
+      animateConstellation();
+    }
+
+    function animateConstellation() {
+      const canvas = document.getElementById('constellationCanvas');
+      if (!canvas || currentDirectorView !== 'constellation') {
+        constellationAnimId = requestAnimationFrame(animateConstellation);
+        return;
+      }
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(229, 169, 60, 0.12)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i < constellationNodes.length; i++) {
+        for (let j = i + 1; j < constellationNodes.length; j++) {
+          const dx = constellationNodes[i].x - constellationNodes[j].x;
+          const dy = constellationNodes[i].y - constellationNodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            ctx.moveTo(constellationNodes[i].x, constellationNodes[i].y);
+            ctx.lineTo(constellationNodes[j].x, constellationNodes[j].y);
+          }
+        }
+      }
+      ctx.stroke();
+
+      const time = performance.now() * 0.002;
+      constellationNodes.forEach(node => {
+        const pulse = Math.sin(time + node.pulse) * 0.25 + 1.0;
+        const isMaster = node.percent === 100;
+
+        const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 2.2 * pulse);
+        if (isMaster) {
+          grad.addColorStop(0, 'rgba(229, 169, 60, 0.6)');
+          grad.addColorStop(1, 'rgba(229, 169, 60, 0)');
+        } else {
+          grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+          grad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+        }
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius * 2.2 * pulse, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = isMaster ? '#f7d088' : '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = isMaster ? '#f1f5f9' : '#cbd5e1';
+        ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(node.director, node.x, node.y + node.radius + 14);
+      });
+
+      constellationAnimId = requestAnimationFrame(animateConstellation);
+    }
+
+    function renderConstellationCanvas() {
+      const canvas = document.getElementById('constellationCanvas');
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = (rect.width || 800) * dpr;
+      canvas.height = (rect.height || 400) * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+    }
+
+    function handleConstellationMouseMove(e) {
+      const canvas = document.getElementById('constellationCanvas');
+      const tt = document.getElementById('constellationTooltip');
+      if (!canvas || !tt) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      let hovered = null;
+      for (const node of constellationNodes) {
+        const dx = mouseX - node.x;
+        const dy = mouseY - node.y;
+        if (Math.sqrt(dx * dx + dy * dy) <= node.radius + 6) {
+          hovered = node;
+          break;
+        }
+      }
+
+      if (hovered) {
+        canvas.style.cursor = 'pointer';
+        document.getElementById('constTooltipName').innerText = hovered.director;
+        document.getElementById('constTooltipMeta').innerText = '완주율: ' + hovered.percent + '% (' + hovered.watched + '/' + hovered.total + '편) • 평균 ★' + hovered.avg.toFixed(1);
+        tt.style.left = hovered.x + 'px';
+        tt.style.top = hovered.y + 'px';
+        tt.classList.remove('hidden');
+      } else {
+        canvas.style.cursor = 'crosshair';
+        tt.classList.add('hidden');
+      }
+    }
+
+    function handleConstellationClick(e) {
+      const canvas = document.getElementById('constellationCanvas');
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      for (const node of constellationNodes) {
+        const dx = mouseX - node.x;
+        const dy = mouseY - node.y;
+        if (Math.sqrt(dx * dx + dy * dy) <= node.radius + 6) {
+          setDirectorView('chips');
+          selectDirector(node.director);
+          document.getElementById('directorDetailBox').scrollIntoView({ behavior: 'smooth' });
+          break;
+        }
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Taste-RAG Semantic Mood Search & Double Feature UI
+    // -------------------------------------------------------------------------
+    let ragDebounceTimer = null;
+
+    function openRagModal() {
+      const modal = document.getElementById('ragSearchModal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      const inp = document.getElementById('ragSearchInput');
+      if (inp) {
+        setTimeout(() => { inp.focus(); inp.select(); }, 100);
+      }
+    }
+
+    function closeRagModal() {
+      const modal = document.getElementById('ragSearchModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function applyRagPrompt(promptText) {
+      const inp = document.getElementById('ragSearchInput');
+      if (!inp) return;
+      inp.value = promptText;
+      triggerRagSearch(promptText);
+    }
+
+    function handleRagSearchInput(e) {
+      const q = e.target.value.trim();
+      clearTimeout(ragDebounceTimer);
+      ragDebounceTimer = setTimeout(() => {
+        triggerRagSearch(q);
+      }, 320);
+    }
+
+    async function triggerRagSearch(query) {
+      const container = document.getElementById('ragResultsContainer');
+      const spinner = document.getElementById('ragSearchSpinner');
+      if (!query) {
+        container.innerHTML = '<div class="text-center py-12 text-gray-500 text-xs"><i class="fa-solid fa-brain text-2xl text-cyan-500/40 mb-2 block"></i>자연어 무드나 감성을 입력하면 개인 취향 벡터가 가장 높은 영화를 큐레이션합니다.</div>';
+        return;
+      }
+
+      if (spinner) spinner.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/movies/semantic-search?q=' + encodeURIComponent(query));
+        const json = await res.json();
+        const results = json.results || [];
+
+        if (spinner) spinner.classList.add('hidden');
+
+        if (results.length === 0) {
+          container.innerHTML = '<div class="text-center py-8 text-gray-400 text-xs bg-cinema-black/40 rounded-xl border border-cinema-border p-4"><i class="fa-solid fa-magnifying-glass text-gray-500 mb-1 block"></i>'' + query + '' 무드에 매칭되는 영화를 찾지 못했습니다. 다른 감성 키워드를 입력해 보세요.</div>';
+          return;
+        }
+
+        let html = '';
+        results.forEach(m => {
+          const scorePct = Math.round(m.score * 100);
+          html += '<div class="p-3.5 rounded-xl bg-cinema-black/80 border border-cinema-border hover:border-cyan-500/50 transition flex flex-col justify-between group">' +
+            '<div class="flex items-start justify-between gap-2 mb-1.5">' +
+              '<div class="flex items-center space-x-2">' +
+                '<span class="text-xs sm:text-sm font-bold text-gray-100 group-hover:text-cyan-300 font-serifKr">' + m.title + '</span>' +
+                '<span class="text-3xs px-2 py-0.5 rounded bg-cinema-gold/15 border border-cinema-gold/30 text-cinema-gold font-cinzel font-bold">★ ' + m.rating.toFixed(1) + '</span>' +
+                '<span class="text-3xs text-cinema-muted font-mono">' + (m.year || '') + '</span>' +
+              '</div>' +
+              '<div class="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 font-mono text-3xs font-bold">' +
+                '<i class="fa-solid fa-bolt text-3xs"></i>' +
+                '<span>' + scorePct + '% 매칭</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="text-2xs text-gray-400 font-medium mb-1.5 flex items-center space-x-2">' +
+              '<span>감독: ' + (m.director || '미상') + '</span>' +
+              '<span class="text-cinema-border">•</span>' +
+              '<span class="text-cyan-400/90 italic font-mono text-3xs">' + m.reason + '</span>' +
+            '</div>' +
+            (m.comment ? '<div class="text-xs text-gray-300 font-serifKr italic pl-2.5 border-l-2 border-cyan-500/50 bg-cyan-950/20 py-1 rounded-r">“' + m.comment + '”</div>' : '') +
+          '</div>';
+        });
+        container.innerHTML = html;
+
+      } catch (err) {
+        if (spinner) spinner.classList.add('hidden');
+        container.innerHTML = '<div class="text-center py-6 text-red-400 text-xs">검색 오류: ' + err.message + '</div>';
+      }
+    }
+
+    async function openDoubleFeatureModal(title) {
+      const modal = document.getElementById('doubleFeatureModal');
+      if (!modal) return;
+
+      modal.classList.remove('hidden');
+      document.getElementById('dfSourceTitle').innerText = title;
+      document.getElementById('dfSourceMeta').innerText = '데이터 연산 중...';
+      document.getElementById('dfSourceRating').innerText = '';
+      document.getElementById('dfPairTitle').innerText = '미학적 대척점 매칭 중...';
+      document.getElementById('dfPairMeta').innerText = '';
+      document.getElementById('dfPairRating').innerText = '';
+      document.getElementById('dfRationaleText').innerText = '이동진 평론가 스타일의 철학적 서문 및 관전 포인트를 인출하고 있습니다...';
+
+      try {
+        const res = await fetch('/api/movies/double-feature?title=' + encodeURIComponent(title));
+        const json = await res.json();
+        if (json.success && json.pairing) {
+          const p = json.pairing;
+          document.getElementById('dfSourceTitle').innerText = p.source_title;
+          document.getElementById('dfPairTitle').innerText = p.pair_title;
+          document.getElementById('dfPairMeta').innerText = (p.pair_director || '') + ' (' + (p.pair_year || '') + ')';
+          document.getElementById('dfPairRating').innerText = '★ ' + parseFloat(p.pair_rating).toFixed(1);
+          document.getElementById('dfRelationBadge').innerText = p.relation;
+          document.getElementById('dfRationaleText').innerText = '“' + p.rationale + '”';
+        } else {
+          document.getElementById('dfPairTitle').innerText = '매칭 작품 없음';
+          document.getElementById('dfRationaleText').innerText = '선택한 영화에 대한 적합한 페어링 데이터를 찾을 수 없습니다.';
+        }
+      } catch (err) {
+        document.getElementById('dfPairTitle').innerText = '네트워크 오류';
+        document.getElementById('dfRationaleText').innerText = err.message;
+      }
+    }
+
+    function closeDoubleFeatureModal() {
+      const modal = document.getElementById('doubleFeatureModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function initApp() {
       if (IS_READONLY) {
         const fab = document.getElementById('fabContainer');
         if (fab) fab.style.display = 'none';
@@ -1992,6 +2570,8 @@ function initApp() {
       initSectionToggles();
       refreshLucideIcons();
       initAppleParallax();
+      initDynamicAmbientLighting();
+      initAuteurConstellation();
     }
 
     window.onload = initApp;
