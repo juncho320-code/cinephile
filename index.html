@@ -2920,8 +2920,18 @@ html[data-halation="on"] .film-frame:hover {
   position: fixed; left: 18px; bottom: 18px; z-index: 48;
   box-shadow: 0 10px 28px rgba(0,0,0,0.65);
 }
+@media (max-width: 640px) {
+  #designLabTrigger {
+    left: 14px;
+    bottom: 14px;
+    padding: 6px 12px;
+    font-size: 0.68rem;
+  }
+}
 #designLabDrawer {
   position: fixed; left: 18px; bottom: 64px; width: 288px; max-width: calc(100vw - 36px); z-index: 65;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
   background: rgba(12, 14, 20, 0.95); backdrop-filter: blur(26px) saturate(190%); -webkit-backdrop-filter: blur(26px) saturate(190%);
   border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 15px;
   box-shadow: 0 24px 48px rgba(0,0,0,0.88); display: none; flex-direction: column; gap: 12px;
