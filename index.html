@@ -3085,7 +3085,8 @@ html[data-halation="on"] .film-frame:hover {
 
   // Director 35mm Filmstrip Reel
   window.openDirectorReel = function(directorName) {
-    if (!window.RAW_DATA || !RAW_DATA.director_stats || !RAW_DATA.director_stats[directorName]) return;
+    const dataObj = typeof RAW_DATA !== 'undefined' ? RAW_DATA : window.RAW_DATA;
+    if (!dataObj || !dataObj.director_stats || !dataObj.director_stats[directorName]) return;
     const d = RAW_DATA.director_stats[directorName];
     const drawer = document.getElementById('directorReelDrawer');
     const container = document.getElementById('reelFramesContainer');
@@ -3150,7 +3151,8 @@ html[data-halation="on"] .film-frame:hover {
   // Cinema Auteur Matrix Grid (#tastePeriodicTable)
   window.renderTastePeriodicTable = function() {
     const container = document.getElementById('tastePeriodicTable');
-    if (!container || !window.RAW_DATA || !RAW_DATA.director_stats) return;
+    const dataObj = typeof RAW_DATA !== 'undefined' ? RAW_DATA : window.RAW_DATA;
+    if (!container || !dataObj || !dataObj.director_stats) return;
     const directors = Object.values(RAW_DATA.director_stats)
       .filter(d => d.watched_count >= 1)
       .sort((a, b) => (b.watched_count - a.watched_count) || (b.avg_rating - a.avg_rating))
@@ -3199,7 +3201,8 @@ html[data-halation="on"] .film-frame:hover {
       if (!grid) return;
       grid.setAttribute('data-layout', window.currentLayout || 'editorial');
 
-      if (window.currentViewMode === 'magazine') {
+      const activeViewMode = typeof currentViewMode !== 'undefined' ? currentViewMode : window.currentViewMode;
+      if (activeViewMode === 'magazine') {
         grid.classList.add('magazine-mode-active');
         const cards = grid.querySelectorAll('.magazine-card');
         cards.forEach((card, idx) => {
@@ -3282,7 +3285,8 @@ html[data-halation="on"] .film-frame:hover {
       reelBtn.className = 'ml-2 px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 hover:bg-amber-400 hover:text-black text-3xs font-mono font-bold transition';
       reelBtn.innerHTML = '🎞️ 35mm 필름 릴';
       reelBtn.onclick = function() {
-        if (window.selectedDirector) window.openDirectorReel(window.selectedDirector);
+        const activeDir = typeof selectedDirector !== 'undefined' ? selectedDirector : window.selectedDirector;
+        if (activeDir) window.openDirectorReel(activeDir);
       };
       selDirName.parentNode.appendChild(reelBtn);
     }
@@ -3373,6 +3377,8 @@ html[data-halation="on"] .film-frame:hover {
   });
 
   function bootCinephile3() {
+    if (typeof RAW_DATA !== 'undefined') window.RAW_DATA = RAW_DATA;
+    if (typeof currentViewMode !== 'undefined') window.currentViewMode = currentViewMode;
     enhanceFilterReviews();
     enhanceDirectorSection();
     enhanceArchiveControlsAndModals();
