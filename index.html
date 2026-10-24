@@ -2610,5 +2610,787 @@
 
     window.onload = initApp;
   </script>
+
+<!-- CINEPHILE 3.0 // A24 & CRITERION TYPOGRAPHY STACK + MULTI-TOOL EVOLUTION ENGINE -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+KR:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+<style>
+:root {
+  --font-display: 'Syne', 'Space Grotesk', 'Pretendard', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-editorial-serif: 'Instrument Serif', 'Cormorant Garamond', 'Noto Serif KR', Georgia, serif;
+  --font-serif-kr: 'Noto Serif KR', 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Pretendard', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  --font-mono: 'JetBrains Mono', 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  --font-cinzel: 'Cinzel', serif;
+  --theme-transition: background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1), color 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+}
+
+/* THEME 1: a24-noir (Default Signature A24 Void Black & Halation Red) */
+:root,
+html[data-theme="a24-noir"],
+body[data-theme="a24-noir"] {
+  --theme-bg: #060608;
+  --theme-bg-subtle: #0d0e13;
+  --theme-surface: #12131b;
+  --theme-card-bg: rgba(18, 19, 27, 0.76);
+  --theme-text-primary: #f5f4f0;
+  --theme-text-secondary: #9a9a96;
+  --theme-text-muted: #6b6a66;
+  --theme-accent: #e5b84b;
+  --theme-accent-rgb: 229, 184, 75;
+  --theme-accent-contrast: #060608;
+  --theme-accent-secondary: #e03c31;
+  --theme-border: rgba(255, 255, 255, 0.11);
+  --theme-border-strong: rgba(255, 255, 255, 0.24);
+  --theme-hairline: rgba(255, 255, 255, 0.07);
+  --theme-pill-bg: rgba(255, 255, 255, 0.05);
+  --theme-shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.14) inset, 0 16px 38px -8px rgba(0, 0, 0, 0.85);
+  --theme-glow: rgba(229, 184, 75, 0.22);
+  --theme-spine-bg: #12131c;
+  --theme-spine-border: rgba(255, 255, 255, 0.15);
+  --theme-spine-stamp: #e5b84b;
+}
+
+/* THEME 2: a24-paper (Warm Archival Editorial Paper & Print Ink) */
+html[data-theme="a24-paper"],
+body[data-theme="a24-paper"] {
+  --theme-bg: #f3efe6;
+  --theme-bg-subtle: #eae4d7;
+  --theme-surface: #e5dfd0;
+  --theme-card-bg: rgba(249, 246, 240, 0.92);
+  --theme-text-primary: #121211;
+  --theme-text-secondary: #4a4842;
+  --theme-text-muted: #78756d;
+  --theme-accent: #c83e2b;
+  --theme-accent-rgb: 200, 62, 43;
+  --theme-accent-contrast: #ffffff;
+  --theme-accent-secondary: #a87832;
+  --theme-border: rgba(18, 18, 17, 0.14);
+  --theme-border-strong: rgba(18, 18, 17, 0.28);
+  --theme-hairline: rgba(18, 18, 17, 0.09);
+  --theme-pill-bg: rgba(18, 18, 17, 0.06);
+  --theme-shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.85) inset, 0 6px 18px rgba(18, 18, 17, 0.07);
+  --theme-glow: rgba(200, 62, 43, 0.16);
+  --theme-spine-bg: #ebe4d5;
+  --theme-spine-border: rgba(18, 18, 17, 0.2);
+  --theme-spine-stamp: #c83e2b;
+}
+
+/* High-contrast Ink Overrides for Light Archival Paper Theme */
+html[data-theme="a24-paper"] .text-gray-100,
+html[data-theme="a24-paper"] .text-gray-200,
+html[data-theme="a24-paper"] .text-white {
+  color: #121211 !important;
+}
+html[data-theme="a24-paper"] .text-gray-300,
+html[data-theme="a24-paper"] .text-gray-400,
+html[data-theme="a24-paper"] .text-cinema-muted {
+  color: #525049 !important;
+}
+html[data-theme="a24-paper"] .bg-cinema-black\/70,
+html[data-theme="a24-paper"] .bg-cinema-black\/80,
+html[data-theme="a24-paper"] .bg-cinema-black\/90,
+html[data-theme="a24-paper"] .bg-cinema-card {
+  background-color: #ebe5d8 !important;
+  border-color: rgba(18, 18, 17, 0.15) !important;
+}
+html[data-theme="a24-paper"] .text-cinema-gold {
+  color: #b83220 !important;
+}
+
+/* THEME 3: criterion-gold (Deep Onyx & Champagne Gold) */
+html[data-theme="criterion-gold"],
+body[data-theme="criterion-gold"] {
+  --theme-bg: #0a0a0e;
+  --theme-bg-subtle: #111117;
+  --theme-surface: #171720;
+  --theme-card-bg: rgba(22, 22, 31, 0.78);
+  --theme-text-primary: #f4f1ea;
+  --theme-text-secondary: #a3a1a8;
+  --theme-text-muted: #6f6d76;
+  --theme-accent: #d4af37;
+  --theme-accent-rgb: 212, 175, 55;
+  --theme-accent-contrast: #0a0a0e;
+  --theme-accent-secondary: #f3de8a;
+  --theme-border: rgba(212, 175, 55, 0.22);
+  --theme-border-strong: rgba(212, 175, 55, 0.45);
+  --theme-hairline: rgba(212, 175, 55, 0.1);
+  --theme-pill-bg: rgba(212, 175, 55, 0.08);
+  --theme-shadow-card: 0 1px 0 0 rgba(212, 175, 55, 0.24) inset, 0 18px 45px -8px rgba(0, 0, 0, 0.9);
+  --theme-glow: rgba(212, 175, 55, 0.25);
+  --theme-spine-bg: #14141d;
+  --theme-spine-border: rgba(212, 175, 55, 0.32);
+  --theme-spine-stamp: #d4af37;
+}
+
+/* THEME 4: mubi-cobalt (MUBI Theatre Midnight Cobalt) */
+html[data-theme="mubi-cobalt"],
+body[data-theme="mubi-cobalt"] {
+  --theme-bg: #070d1f;
+  --theme-bg-subtle: #0b1430;
+  --theme-surface: #101c43;
+  --theme-card-bg: rgba(14, 25, 58, 0.78);
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #94a3b8;
+  --theme-text-muted: #64748b;
+  --theme-accent: #3b82f6;
+  --theme-accent-rgb: 59, 130, 246;
+  --theme-accent-contrast: #ffffff;
+  --theme-accent-secondary: #38bdf8;
+  --theme-border: rgba(59, 130, 246, 0.28);
+  --theme-border-strong: rgba(56, 189, 248, 0.52);
+  --theme-hairline: rgba(56, 189, 248, 0.12);
+  --theme-pill-bg: rgba(59, 130, 246, 0.1);
+  --theme-shadow-card: 0 1px 0 0 rgba(56, 189, 248, 0.2) inset, 0 18px 45px -8px rgba(3, 7, 18, 0.88);
+  --theme-glow: rgba(59, 130, 246, 0.28);
+  --theme-spine-bg: #0d1736;
+  --theme-spine-border: rgba(59, 130, 246, 0.36);
+  --theme-spine-stamp: #38bdf8;
+}
+
+body {
+  background-color: var(--theme-bg) !important;
+  color: var(--theme-text-primary) !important;
+  font-family: var(--font-sans) !important;
+  transition: var(--theme-transition);
+}
+.glass-card {
+  background: var(--theme-card-bg) !important;
+  border: 1px solid var(--theme-border) !important;
+  box-shadow: var(--theme-shadow-card) !important;
+  transition: var(--theme-transition);
+}
+.apple-glass-header {
+  background: var(--theme-card-bg) !important;
+  border-bottom: 1px solid var(--theme-border) !important;
+}
+
+/* A24 Signature Typography Classes */
+.a24-title-font, .magazine-card h4, h1, h2 {
+  font-family: var(--font-display) !important;
+  letter-spacing: -0.03em !important;
+}
+.a24-archive-tag {
+  font-family: var(--font-mono) !important;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.a24-pullquote {
+  font-family: var(--font-editorial-serif) !important;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* Track 2: Algorithmic Editorial Spread & Spine Shelf */
+@media (min-width: 1024px) {
+  html[data-layout="editorial"] .magazine-card.is-editorial-spread {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--theme-card-bg) 0%, rgba(var(--theme-accent-rgb), 0.08) 100%) !important;
+    border: 1px solid var(--theme-border-strong) !important;
+    padding: 1.5rem 1.75rem !important;
+  }
+  html[data-layout="editorial"] .magazine-card.is-editorial-spread h4 {
+    font-size: 1.45rem !important;
+    line-height: 1.15 !important;
+  }
+}
+
+/* Spine Shelf Mode */
+html[data-layout="spine"] #reviewsGrid.magazine-mode-active {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  align-items: flex-end !important;
+  padding: 24px 18px 18px 18px !important;
+  background: var(--theme-bg-subtle) !important;
+  border: 1px solid var(--theme-border) !important;
+  border-bottom: 8px solid rgba(var(--theme-accent-rgb), 0.35) !important;
+  border-radius: 16px !important;
+  box-shadow: inset 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+}
+html[data-layout="spine"] #reviewsGrid.magazine-mode-active .magazine-card {
+  width: 68px !important;
+  height: 330px !important;
+  padding: 10px 6px !important;
+  border-radius: 6px !important;
+  background: var(--theme-spine-bg) !important;
+  border: 1px solid var(--theme-spine-border) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  cursor: pointer !important;
+}
+html[data-layout="spine"] #reviewsGrid.magazine-mode-active .magazine-card:hover {
+  transform: translateY(-14px) scale(1.04) !important;
+  z-index: 35 !important;
+  border-color: var(--theme-accent) !important;
+}
+html[data-layout="spine"] #reviewsGrid.magazine-mode-active .standard-card-content {
+  display: none !important;
+}
+html:not([data-layout="spine"]) .spine-card-view {
+  display: none !important;
+}
+.spine-card-view {
+  width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+}
+.spine-top-num {
+  font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; color: var(--theme-spine-stamp);
+  letter-spacing: 0.1em; border-bottom: 1px solid var(--theme-hairline); width: 100%; text-align: center; padding-bottom: 5px;
+}
+.spine-title-vertical {
+  writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--font-display);
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; color: var(--theme-text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 195px; margin: auto 0;
+}
+.spine-bottom-meta {
+  border-top: 1px solid var(--theme-hairline); width: 100%; text-align: center; padding-top: 5px;
+}
+
+/* Track 3 & 4: Director 35mm Filmstrip Reel Drawer */
+#directorReelDrawer {
+  position: fixed; inset: auto 0 0 0; z-index: 70;
+  background: rgba(8, 9, 13, 0.96);
+  backdrop-filter: blur(28px) saturate(190%); -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-top: 1px solid var(--theme-border-strong, rgba(255,255,255,0.22));
+  box-shadow: 0 -20px 50px rgba(0,0,0,0.88);
+  transform: translateY(110%); transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#directorReelDrawer.active { transform: translateY(0); }
+.sprocket-track {
+  height: 14px; background: #040406;
+  background-image: repeating-linear-gradient(90deg, transparent 0 8px, rgba(229,184,75,0.55) 8px 18px, transparent 18px 26px);
+  opacity: 0.5; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.filmstrip-reel {
+  display: flex; gap: 14px; overflow-x: auto; scroll-behavior: smooth; padding: 14px 20px; scrollbar-width: thin;
+}
+.film-frame {
+  flex: 0 0 230px; background: rgba(18, 20, 28, 0.9);
+  border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 12px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+.film-frame:hover {
+  transform: translateY(-4px); border-color: var(--theme-accent, #e5b84b);
+}
+
+/* Cinema Auteur Matrix Grid (#tastePeriodicTable) */
+.auteur-matrix-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 10px;
+}
+.auteur-tile {
+  background: var(--theme-card-bg); border: 1px solid var(--theme-border);
+  border-radius: 10px; padding: 10px 12px; cursor: pointer; display: flex; flex-direction: column;
+  justify-content: space-between; min-height: 98px; transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.auteur-tile:hover {
+  transform: translateY(-3px); border-color: var(--theme-accent);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.45), 0 0 14px var(--theme-glow);
+}
+.auteur-code {
+  font-family: var(--font-display); font-size: 1.25rem; font-weight: 800;
+  letter-spacing: -0.03em; color: var(--theme-accent); line-height: 1;
+}
+
+/* Ticket Stub Perforation & Halation Glow */
+.ticket-stub-notch-l, .ticket-stub-notch-r {
+  position: absolute; top: 52%; width: 20px; height: 20px; background: #060608;
+  border-radius: 50%; transform: translateY(-50%); z-index: 20; pointer-events: none;
+}
+.ticket-stub-notch-l { left: -10px; border-right: 1px solid rgba(255,255,255,0.22); }
+.ticket-stub-notch-r { right: -10px; border-left: 1px solid rgba(255,255,255,0.22); }
+.ticket-barcode {
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.75) 0 2px, transparent 2px 4px, rgba(255,255,255,0.75) 4px 7px, transparent 7px 10px);
+  height: 22px; width: 120px; opacity: 0.65;
+}
+html[data-halation="on"] .magazine-card:hover,
+html[data-halation="on"] .film-frame:hover {
+  box-shadow: 0 0 28px rgba(224, 60, 49, 0.42), 0 16px 36px rgba(0, 0, 0, 0.85) !important;
+  border-color: rgba(224, 60, 49, 0.65) !important;
+}
+
+/* Floating Design Lab Drawer */
+#designLabTrigger {
+  position: fixed; left: 18px; bottom: 18px; z-index: 48;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.65);
+}
+#designLabDrawer {
+  position: fixed; left: 18px; bottom: 64px; width: 288px; max-width: calc(100vw - 36px); z-index: 65;
+  background: rgba(12, 14, 20, 0.95); backdrop-filter: blur(26px) saturate(190%); -webkit-backdrop-filter: blur(26px) saturate(190%);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 15px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.88); display: none; flex-direction: column; gap: 12px;
+}
+#designLabDrawer.active { display: flex; }
+.lab-btn-active {
+  border-color: #e5b84b !important;
+  background: rgba(229, 184, 75, 0.18) !important;
+  color: #f5f4f0 !important;
+}
+</style>
+
+<!-- HTML: Director 35mm Filmstrip Reel Drawer -->
+<div id="directorReelDrawer" aria-hidden="true">
+  <div class="sprocket-track"></div>
+  <div class="px-4 sm:px-6 py-2.5 flex items-center justify-between border-b border-white/[0.08]">
+    <div class="flex items-center space-x-2.5 overflow-hidden">
+      <span class="font-mono text-3xs uppercase tracking-widest text-amber-400 flex-shrink-0">A24 // 35MM REEL</span>
+      <h3 id="reelDirectorName" class="font-bold text-sm sm:text-base text-white truncate">Director</h3>
+      <span id="reelStatsBadge" class="text-3xs px-2 py-0.5 rounded bg-white/[0.08] text-gray-300 font-mono flex-shrink-0">0 Films</span>
+    </div>
+    <button onclick="closeDirectorReel()" class="w-7 h-7 rounded-full bg-white/[0.08] hover:bg-white/[0.2] flex items-center justify-center text-gray-300 hover:text-white transition text-xs">✕</button>
+  </div>
+  <div id="reelFramesContainer" class="filmstrip-reel"></div>
+  <div class="sprocket-track"></div>
+</div>
+
+<!-- HTML: Floating Design Lab Trigger & Drawer -->
+<button id="designLabTrigger" onclick="toggleDesignLab()" class="apple-glass-pill px-3.5 py-2 rounded-full text-xs font-mono font-bold flex items-center space-x-1.5 border border-white/20 active:scale-95 transition" title="A24 & Cinephile 3.0 Design Lab (Shortcut: D)">
+  <span>🎨</span><span>A24 LAB</span>
+</button>
+
+<div id="designLabDrawer">
+  <div class="flex items-center justify-between pb-2 border-b border-white/10">
+    <div>
+      <span class="font-mono text-2xs uppercase tracking-widest text-amber-400 font-bold">CINEPHILE 3.0 // DESIGN LAB</span>
+      <div class="text-3xs text-gray-400 font-mono">A24 Typography & Multi-Tool Engine</div>
+    </div>
+    <button onclick="toggleDesignLab()" class="text-gray-400 hover:text-white text-xs px-1.5 py-0.5">✕</button>
+  </div>
+
+  <div>
+    <div class="text-3xs uppercase font-mono text-gray-400 mb-1.5 tracking-wider">Theme Palette ([T] to cycle)</div>
+    <div class="grid grid-cols-2 gap-1.5">
+      <button id="labTheme-a24-noir" onclick="setDashboardTheme('a24-noir')" class="px-2.5 py-1.5 rounded-lg bg-black/80 text-white text-2xs font-mono border border-white/15 hover:border-amber-400 text-left transition">⚫ A24 Noir</button>
+      <button id="labTheme-a24-paper" onclick="setDashboardTheme('a24-paper')" class="px-2.5 py-1.5 rounded-lg bg-[#f3efe6] text-[#121211] text-2xs font-mono font-semibold border border-black/20 hover:border-red-600 text-left transition">📜 A24 Paper</button>
+      <button id="labTheme-criterion-gold" onclick="setDashboardTheme('criterion-gold')" class="px-2.5 py-1.5 rounded-lg bg-[#0a0a0e] text-[#d4af37] text-2xs font-mono border border-[#d4af37]/30 hover:border-[#d4af37] text-left transition">👑 Criterion</button>
+      <button id="labTheme-mubi-cobalt" onclick="setDashboardTheme('mubi-cobalt')" class="px-2.5 py-1.5 rounded-lg bg-[#070d1f] text-blue-300 text-2xs font-mono border border-blue-500/30 hover:border-blue-400 text-left transition">🔷 MUBI Cobalt</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="text-3xs uppercase font-mono text-gray-400 mb-1.5 tracking-wider">Art Direction Layout ([L] to cycle)</div>
+    <div class="grid grid-cols-3 gap-1.5">
+      <button id="labLayout-editorial" onclick="setDashboardLayout('editorial')" class="px-2 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.14] text-gray-200 text-3xs font-mono border border-white/10 transition">Editorial</button>
+      <button id="labLayout-grid" onclick="setDashboardLayout('grid')" class="px-2 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.14] text-gray-200 text-3xs font-mono border border-white/10 transition">Swiss Grid</button>
+      <button id="labLayout-spine" onclick="setDashboardLayout('spine')" class="px-2 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.14] text-gray-200 text-3xs font-mono border border-white/10 transition">Spine Shelf</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="flex items-center justify-between text-3xs font-mono text-gray-400 mb-1">
+      <span>35mm Film Grain</span>
+      <span id="grainValueLabel">4%</span>
+    </div>
+    <input type="range" id="grainSlider" min="0" max="0.10" step="0.005" value="0.042" oninput="updateFilmGrain(this.value)" class="w-full h-1 bg-white/20 rounded cursor-pointer accent-amber-400">
+  </div>
+
+  <div class="flex items-center justify-between pt-1.5 border-t border-white/10 text-3xs font-mono text-gray-300">
+    <span>35mm Halation Red Glow</span>
+    <button id="btnHalationToggle" onclick="toggleHalation()" class="px-2.5 py-0.5 rounded bg-white/[0.08] border border-white/20 hover:border-amber-400 transition">ON</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const THEME_KEY = 'cinephile_theme_preset';
+  const LAYOUT_KEY = 'cinephile_layout_preset';
+  const HALATION_KEY = 'cinephile_halation_mode';
+
+  window.currentTheme = localStorage.getItem(THEME_KEY) || 'a24-noir';
+  window.currentLayout = localStorage.getItem(LAYOUT_KEY) || 'editorial';
+  let currentHalation = localStorage.getItem(HALATION_KEY) || 'on';
+
+  window.setDashboardTheme = function(themeName, silent) {
+    window.currentTheme = themeName;
+    localStorage.setItem(THEME_KEY, themeName);
+    document.documentElement.setAttribute('data-theme', themeName);
+    document.body.setAttribute('data-theme', themeName);
+
+    ['a24-noir', 'a24-paper', 'criterion-gold', 'mubi-cobalt'].forEach(t => {
+      const btn = document.getElementById('labTheme-' + t);
+      const hdrBtn = document.getElementById('hdrTheme-' + t);
+      if (btn) btn.classList.toggle('lab-btn-active', t === themeName);
+      if (hdrBtn) hdrBtn.classList.toggle('lab-btn-active', t === themeName);
+    });
+
+    if (!silent && typeof showToast === 'function') {
+      const names = {
+        'a24-noir': 'A24 Noir 테마 적용',
+        'a24-paper': 'A24 Archival Paper 테마 적용',
+        'criterion-gold': 'Criterion Gold 테마 적용',
+        'mubi-cobalt': 'MUBI Cobalt 테마 적용'
+      };
+      showToast(names[themeName] || '테마 변경');
+    }
+  };
+
+  window.setDashboardLayout = function(layoutName, silent) {
+    window.currentLayout = layoutName;
+    localStorage.setItem(LAYOUT_KEY, layoutName);
+    document.documentElement.setAttribute('data-layout', layoutName);
+    const grid = document.getElementById('reviewsGrid');
+    if (grid) grid.setAttribute('data-layout', layoutName);
+
+    ['editorial', 'grid', 'spine'].forEach(l => {
+      const btn = document.getElementById('labLayout-' + l);
+      const hdrBtn = document.getElementById('hdrLayout-' + l);
+      if (btn) btn.classList.toggle('lab-btn-active', l === layoutName);
+      if (hdrBtn) hdrBtn.classList.toggle('lab-btn-active', l === layoutName);
+    });
+
+    if (typeof window.filterReviews === 'function') {
+      window.filterReviews();
+    }
+    if (!silent && typeof showToast === 'function') {
+      const names = {
+        'editorial': 'A24 에디토리얼 스프레드 뷰',
+        'grid': '스위스 포스터 그리드 뷰',
+        'spine': '크라이테리온/A24 스파인 서가 뷰'
+      };
+      showToast(names[layoutName] || '레이아웃 변경');
+    }
+  };
+
+  window.toggleDesignLab = function() {
+    const lab = document.getElementById('designLabDrawer');
+    if (lab) lab.classList.toggle('active');
+  };
+
+  window.updateFilmGrain = function(val) {
+    const grainEl = document.querySelector('.film-grain');
+    if (grainEl) grainEl.style.opacity = val;
+    const label = document.getElementById('grainValueLabel');
+    if (label) label.innerText = Math.round(parseFloat(val) * 100) + '%';
+    localStorage.setItem('cinephile_grain_opacity', val);
+  };
+
+  window.toggleHalation = function(forceVal) {
+    currentHalation = typeof forceVal === 'string' ? forceVal : (document.documentElement.getAttribute('data-halation') === 'on' ? 'off' : 'on');
+    document.documentElement.setAttribute('data-halation', currentHalation);
+    localStorage.setItem(HALATION_KEY, currentHalation);
+    const btn = document.getElementById('btnHalationToggle');
+    if (btn) {
+      btn.innerText = currentHalation.toUpperCase();
+      btn.className = currentHalation === 'on'
+        ? 'px-2.5 py-0.5 rounded bg-red-600/30 text-red-300 border border-red-500/60 font-bold'
+        : 'px-2.5 py-0.5 rounded bg-white/[0.08] border border-white/20 text-gray-400';
+    }
+  };
+
+  // Director 35mm Filmstrip Reel
+  window.openDirectorReel = function(directorName) {
+    if (!window.RAW_DATA || !RAW_DATA.director_stats || !RAW_DATA.director_stats[directorName]) return;
+    const d = RAW_DATA.director_stats[directorName];
+    const drawer = document.getElementById('directorReelDrawer');
+    const container = document.getElementById('reelFramesContainer');
+    if (!drawer || !container) return;
+
+    document.getElementById('reelDirectorName').innerText = directorName;
+    const watched = (d.watched_movies || []).length;
+    const watchlist = (d.watchlist_movies || []).length;
+    document.getElementById('reelStatsBadge').innerText = watched + ' Watched · ' + watchlist + ' Queued';
+
+    container.innerHTML = '';
+    const allFilms = [
+      ...(d.watched_movies || []).map(m => Object.assign({}, m, { isWatched: true })),
+      ...(d.watchlist_movies || []).map(w => Object.assign({}, w, { isWatched: false }))
+    ];
+
+    allFilms.forEach((film, idx) => {
+      const frame = document.createElement('div');
+      frame.className = 'film-frame';
+      const frameNo = String(idx + 1).padStart(2, '0');
+      const badgeHtml = film.isWatched
+        ? '<span class="text-amber-400 font-bold">★ ' + Number(film.rating || 4.0).toFixed(1) + '</span>'
+        : '<span class="text-cyan-400">QUEUED</span>';
+      const commentHtml = film.comment
+        ? '<p class="text-2xs text-gray-300 a24-pullquote line-clamp-2 mt-1">“' + film.comment + '”</p>'
+        : '';
+      frame.innerHTML =
+        '<div>' +
+          '<div class="flex items-center justify-between text-3xs font-mono text-gray-400 mb-1.5">' +
+            '<span>FRAME ' + frameNo + 'A</span>' +
+            badgeHtml +
+          '</div>' +
+          '<h4 class="font-bold text-xs sm:text-sm text-white truncate mb-0.5 a24-title-font">' + film.title + '</h4>' +
+          '<div class="text-3xs text-gray-400 font-mono">' + (film.year || 'ARCHIVE') + '</div>' +
+          commentHtml +
+        '</div>' +
+        '<div class="pt-2 mt-2 border-t border-white/[0.08] flex items-center justify-between text-3xs text-gray-400 font-mono">' +
+          '<span>35MM KODAK 2383</span>' +
+          (film.isWatched ? '<span class="text-emerald-400">✓ PRINT</span>' : '<span class="text-cyan-400">OTT</span>') +
+        '</div>';
+      container.appendChild(frame);
+    });
+
+    drawer.classList.add('active');
+    drawer.setAttribute('aria-hidden', 'false');
+    container.onwheel = function(e) {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      }
+    };
+  };
+
+  window.closeDirectorReel = function() {
+    const drawer = document.getElementById('directorReelDrawer');
+    if (drawer) {
+      drawer.classList.remove('active');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  // Cinema Auteur Matrix Grid (#tastePeriodicTable)
+  window.renderTastePeriodicTable = function() {
+    const container = document.getElementById('tastePeriodicTable');
+    if (!container || !window.RAW_DATA || !RAW_DATA.director_stats) return;
+    const directors = Object.values(RAW_DATA.director_stats)
+      .filter(d => d.watched_count >= 1)
+      .sort((a, b) => (b.watched_count - a.watched_count) || (b.avg_rating - a.avg_rating))
+      .slice(0, 18);
+
+    container.className = 'auteur-matrix-grid';
+    container.innerHTML = '';
+
+    directors.forEach((d, idx) => {
+      const tile = document.createElement('div');
+      tile.className = 'auteur-tile';
+      const parts = d.name.trim().split(/\s+/);
+      let code = parts.length >= 2 ? (parts[0][0] + parts[1][0]).toUpperCase() : d.name.substring(0, 2).toUpperCase();
+      const watched = d.watched_count || 0;
+      const total = watched + (d.watchlist_movies ? d.watchlist_movies.length : 0);
+      const pct = total > 0 ? Math.round((watched / total) * 100) : 100;
+
+      tile.innerHTML =
+        '<div class="flex items-center justify-between">' +
+          '<span class="auteur-code">' + code + '</span>' +
+          '<span class="text-3xs font-mono text-gray-400">#' + String(idx + 1).padStart(2, '0') + ' · ' + pct + '%</span>' +
+        '</div>' +
+        '<div class="my-1">' +
+          '<div class="font-bold text-xs text-gray-100 truncate">' + d.name + '</div>' +
+          '<div class="text-3xs text-cinema-muted font-mono">' + watched + '편 · ★ ' + (d.avg_rating || '-') + '</div>' +
+        '</div>' +
+        '<div class="w-full bg-white/[0.08] h-1 rounded-full overflow-hidden">' +
+          '<div class="bg-cinema-gold h-full" style="width:' + pct + '%"></div>' +
+        '</div>';
+      tile.onclick = function() {
+        if (typeof selectDirector === 'function') selectDirector(d.name);
+        window.openDirectorReel(d.name);
+      };
+      container.appendChild(tile);
+    });
+  };
+
+  // Wrap filterReviews to inject A24 Archival Spine Numbers, Editorial Spreads & Spine Shelf Views
+  function enhanceFilterReviews() {
+    const origFilter = window.filterReviews;
+    if (typeof origFilter !== 'function' || origFilter._cinephile3Wrapped) return;
+
+    window.filterReviews = function() {
+      origFilter.apply(this, arguments);
+      const grid = document.getElementById('reviewsGrid');
+      if (!grid) return;
+      grid.setAttribute('data-layout', window.currentLayout || 'editorial');
+
+      if (window.currentViewMode === 'magazine') {
+        grid.classList.add('magazine-mode-active');
+        const cards = grid.querySelectorAll('.magazine-card');
+        cards.forEach((card, idx) => {
+          const rating = parseFloat(card.dataset.movieRating || '0');
+          const title = card.dataset.movieTitle || '';
+          const archiveNo = String(idx + 1).padStart(3, '0');
+
+          // Determine if this card gets Asymmetric Editorial Spread
+          const isSpread = (window.currentLayout === 'editorial') && ((rating === 5.0 && idx < 12) || (idx % 7 === 0 && rating >= 4.5));
+          if (isSpread) {
+            card.classList.add('is-editorial-spread');
+          } else {
+            card.classList.remove('is-editorial-spread');
+          }
+
+          // Wrap existing children in .standard-card-content if not already wrapped
+          if (!card.querySelector('.standard-card-content')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'standard-card-content flex flex-col justify-between h-full w-full';
+            while (card.firstChild) {
+              wrapper.appendChild(card.firstChild);
+            }
+            // Inject A24 Archive Number & 35mm Reel Trigger into top bar
+            const topTag = document.createElement('div');
+            topTag.className = 'flex items-center justify-between pb-2 mb-2 border-b border-white/[0.07] a24-archive-tag text-cinema-muted';
+            topTag.innerHTML = '<span>A24 // ARCHIVE № ' + archiveNo + '</span><span>' + (isSpread ? 'FEATURE SPREAD // 2.39:1' : '35MM EDITION') + '</span>';
+            wrapper.insertBefore(topTag, wrapper.firstChild);
+            card.appendChild(wrapper);
+          }
+
+          // Inject .spine-card-view for Spine Shelf mode
+          if (!card.querySelector('.spine-card-view')) {
+            const spine = document.createElement('div');
+            spine.className = 'spine-card-view';
+            spine.innerHTML =
+              '<div class="spine-top-num">№' + archiveNo + '</div>' +
+              '<div class="spine-title-vertical">' + title + '</div>' +
+              '<div class="spine-bottom-meta"><span class="text-3xs font-cinzel font-bold text-cinema-gold">★' + rating.toFixed(1) + '</span></div>';
+            card.appendChild(spine);
+          }
+        });
+      } else {
+        grid.classList.remove('magazine-mode-active');
+      }
+    };
+    window.filterReviews._cinephile3Wrapped = true;
+  }
+
+  // Extend setDirectorView to support 'matrix' (Taste Periodic Table)
+  function enhanceDirectorSection() {
+    const btnConst = document.getElementById('btnDirViewConstellation');
+    const boxConst = document.getElementById('directorConstellationBox');
+    if (btnConst && !document.getElementById('btnDirViewMatrix')) {
+      const btnMatrix = document.createElement('button');
+      btnMatrix.id = 'btnDirViewMatrix';
+      btnMatrix.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1';
+      btnMatrix.innerHTML = '<i class="fa-solid fa-table-cells text-3xs text-amber-400"></i><span>주기율표 (Matrix)</span>';
+      btnMatrix.onclick = function() { window.setDirectorView('matrix'); };
+      btnConst.parentNode.appendChild(btnMatrix);
+    }
+
+    if (boxConst && !document.getElementById('directorMatrixBox')) {
+      const boxMatrix = document.createElement('div');
+      boxMatrix.id = 'directorMatrixBox';
+      boxMatrix.className = 'hidden rounded-2xl border border-cinema-border bg-cinema-black/90 p-3 sm:p-4';
+      boxMatrix.innerHTML =
+        '<div class="flex items-center justify-between mb-3 px-1">' +
+          '<span class="a24-archive-tag text-amber-400">A24 // AUTEUR PERIODIC MATRIX (TOP 18 DIRECTORS)</span>' +
+          '<span class="text-3xs text-gray-400 font-mono">타일 클릭 시 35mm 필름 릴 오픈</span>' +
+        '</div>' +
+        '<div id="tastePeriodicTable"></div>';
+      boxConst.parentNode.insertBefore(boxMatrix, boxConst.nextSibling);
+    }
+
+    // Add 35mm Reel button next to Selected Director Name
+    const selDirName = document.getElementById('selectedDirectorName');
+    if (selDirName && !document.getElementById('btnOpen35mmReel')) {
+      const reelBtn = document.createElement('button');
+      reelBtn.id = 'btnOpen35mmReel';
+      reelBtn.className = 'ml-2 px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 hover:bg-amber-400 hover:text-black text-3xs font-mono font-bold transition';
+      reelBtn.innerHTML = '🎞️ 35mm 필름 릴';
+      reelBtn.onclick = function() {
+        if (window.selectedDirector) window.openDirectorReel(window.selectedDirector);
+      };
+      selDirName.parentNode.appendChild(reelBtn);
+    }
+
+    const origSetDirView = window.setDirectorView;
+    if (typeof origSetDirView === 'function' && !origSetDirView._cinephile3Wrapped) {
+      window.setDirectorView = function(view) {
+        const boxMatrix = document.getElementById('directorMatrixBox');
+        const btnMatrix = document.getElementById('btnDirViewMatrix');
+        const btnChips = document.getElementById('btnDirViewChips');
+        const btnConst = document.getElementById('btnDirViewConstellation');
+        const boxConst = document.getElementById('directorConstellationBox');
+        const boxChips = document.getElementById('directorChipsContainer');
+
+        if (view === 'matrix') {
+          window.currentDirectorView = 'matrix';
+          if (boxMatrix) boxMatrix.classList.remove('hidden');
+          if (boxConst) boxConst.classList.add('hidden');
+          if (boxChips) boxChips.classList.add('hidden');
+          if (btnMatrix) btnMatrix.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-gold text-black font-semibold transition text-2xs sm:text-xs flex items-center space-x-1';
+          if (btnChips) btnChips.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1';
+          if (btnConst) btnConst.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1';
+          window.renderTastePeriodicTable();
+        } else {
+          if (boxMatrix) boxMatrix.classList.add('hidden');
+          if (btnMatrix) btnMatrix.className = 'px-2.5 py-1.5 rounded-lg bg-cinema-border hover:bg-gray-800 text-gray-300 transition text-2xs sm:text-xs flex items-center space-x-1';
+          origSetDirView.apply(this, arguments);
+        }
+      };
+      window.setDirectorView._cinephile3Wrapped = true;
+    }
+  }
+
+  // Inject Layout Switcher Pills into Archive Section Header & Ticket Stub styling into Modals
+  function enhanceArchiveControlsAndModals() {
+    const btnMag = document.getElementById('btnViewMagazine');
+    if (btnMag && !document.getElementById('hdrLayout-editorial')) {
+      const bar = btnMag.parentNode;
+      const sep = document.createElement('div');
+      sep.className = 'w-px h-4 bg-white/15 mx-1 self-center';
+      bar.appendChild(sep);
+
+      [
+        { id: 'editorial', label: '에디토리얼' },
+        { id: 'grid', label: '그리드' },
+        { id: 'spine', label: '스파인 서가' }
+      ].forEach(item => {
+        const b = document.createElement('button');
+        b.id = 'hdrLayout-' + item.id;
+        b.className = 'px-2.5 py-1 rounded-md text-3xs font-mono font-semibold text-gray-300 hover:text-white transition';
+        b.innerText = item.label;
+        b.onclick = function() {
+          if (window.currentViewMode !== 'magazine' && typeof setViewMode === 'function') setViewMode('magazine');
+          window.setDashboardLayout(item.id);
+        };
+        bar.appendChild(b);
+      });
+    }
+
+    // Decorate Double Feature Modal with Physical 35mm Ticket Notches & Barcode
+    const dfModalCard = document.querySelector('#doubleFeatureModal > div');
+    if (dfModalCard && !dfModalCard.querySelector('.ticket-stub-notch-l')) {
+      dfModalCard.classList.add('relative');
+      const nl = document.createElement('div'); nl.className = 'ticket-stub-notch-l';
+      const nr = document.createElement('div'); nr.className = 'ticket-stub-notch-r';
+      dfModalCard.appendChild(nl); dfModalCard.appendChild(nr);
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+    if (e.key === 't' || e.key === 'T') {
+      const themes = ['a24-noir', 'a24-paper', 'criterion-gold', 'mubi-cobalt'];
+      const next = themes[(themes.indexOf(window.currentTheme) + 1) % themes.length];
+      window.setDashboardTheme(next);
+    } else if (e.key === 'l' || e.key === 'L') {
+      const layouts = ['editorial', 'grid', 'spine'];
+      const next = layouts[(layouts.indexOf(window.currentLayout) + 1) % layouts.length];
+      window.setDashboardLayout(next);
+    } else if (e.key === 'd' || e.key === 'D') {
+      e.preventDefault();
+      window.toggleDesignLab();
+    } else if (e.key === 'Escape') {
+      window.closeDirectorReel();
+      const lab = document.getElementById('designLabDrawer');
+      if (lab) lab.classList.remove('active');
+    }
+  });
+
+  function bootCinephile3() {
+    enhanceFilterReviews();
+    enhanceDirectorSection();
+    enhanceArchiveControlsAndModals();
+    window.setDashboardTheme(window.currentTheme, true);
+    window.toggleHalation(currentHalation);
+    window.setDashboardLayout(window.currentLayout, true);
+    window.renderTastePeriodicTable();
+    const savedGrain = localStorage.getItem('cinephile_grain_opacity');
+    if (savedGrain !== null) window.updateFilmGrain(savedGrain);
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(bootCinephile3, 50);
+  } else {
+    window.addEventListener('load', function() { setTimeout(bootCinephile3, 50); });
+  }
+})();
+</script>
+
 </body>
 </html>
